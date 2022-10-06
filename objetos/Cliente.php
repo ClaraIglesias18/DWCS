@@ -10,22 +10,28 @@
             
         }
 
-        public function getSaldo() {
-            return $this->saldo;
-        }
-
-        public function setSaldo($saldo) {
-
-            $this->saldo = $saldo;
-
-            return $this;
-
-        }
-
 
         public function __toString()
         {
             return "Cliente: ". $this->saldo." ".parent::__toString();
+        }
+
+        /**
+         * Get the value of saldo
+         */
+        public function getSaldo()
+        {
+                return $this->saldo;
+        }
+
+        /**
+         * Set the value of saldo
+         */
+        public function setSaldo($saldo): self
+        {
+                $this->saldo = $saldo;
+
+                return $this;
         }
     }
 

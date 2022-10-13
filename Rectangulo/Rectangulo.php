@@ -17,8 +17,7 @@
 
         }
 
-        public function getPunto1()
-        {
+        public function getPunto1(){
                 return $this->punto1;
         }
 
@@ -93,4 +92,3 @@
             return $this->punto1." ".$this->punto2." ".$this->punto3." ".$this->punto4; 
         }
     }
-?>

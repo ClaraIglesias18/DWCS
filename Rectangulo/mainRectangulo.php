@@ -2,7 +2,7 @@
     include_once("Punto.php");
     include_once("Rectangulo.php");
 
-    $rec1 = new Rectangulo(0, 0, 4, 0, 0, 5, 4, 5);
+    $rec1 = new Rectangulo(6, 2, 9, 2, 6, 5, 9, 5);
 
     echo $rec1;
     echo "\nSuperficie: ";    

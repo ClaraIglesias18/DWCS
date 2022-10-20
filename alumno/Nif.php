@@ -25,6 +25,7 @@
                 $letraEntrada = substr($numero, -1);
                 $numEntrada = str_replace($letraEntrada, "", $numero);
 
+                $this->numero = $numEntrada;
                 $this->letra = $this->calcularLetra($numEntrada);
             }
         }

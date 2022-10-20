@@ -21,19 +21,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <title>Formulario de Alumno</title>
 </head>
 <body>
-    <h1>Formulario Alumno</h1>
-    <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>"method="post">
-        <input name="nombre" type="text">
-        <input name="apellidos" type="text">
-        <input name="sexo" type="radio" value="Hombre">
-        <label for="hombre">Hombre</label>
-        <input name="sexo" type="radio" value="Mujer">
-        <label for="mujer">Mujer</label>
-        <input name="sexo" type="radio" value="Otro">
-        <label for="otro">Otro</label>
-        <input name="nif" type="text">
-        <input type="submit" name="enviar">
-    </form>
+    <?php include_once("componentes/formulario.php"); ?>
 </body>
 
 </html>

@@ -18,14 +18,20 @@
             $this->sexo = $this->sexos[array_search($sexo, $this->sexos)];
         }
 
-        public function __toString() {
-            return "<br>"."Nombre: ".$this->nombre
-                ."<br>"."Apellidos: ".$this->apellidos
-                ."<br>"."\nSexo: ".$this->sexo
-                ."<br>"."\nNIF: ".$this->nif;
+        public function getNombre() {
+            return $this->nombre;
         }
 
-        
+        public function getNif() {
+            return $this->nif;
+        }
 
+        public function getApellidos() {
+            return $this->apellidos;
+        }
+
+        public function getSexo() {
+            return $this->sexo;
+        }
     }
 ?>

@@ -1,19 +1,18 @@
 <?php
 include_once("Alumno.php");
+include_once("datos.php");
+$salida;
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    if (isset($_POST['nombre']) && isset($_POST['apellidos']) && isset($_POST['nif']) && isset($_POST['sexo'])) {
-        echo "Envio correcto"."<br>"."----------------";
+    try {
         $alumno = new Alumno($_POST['nombre'], $_POST['apellidos'], $_POST['sexo'], $_POST['nif']);
-        echo $alumno;
-    } else {
-        echo "Envio incorrecto";
+    } catch(Exception $e) {
+        unset($alumno);
+        $error = $e->getMessage();
     }
 }
-
 ?>
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -21,7 +20,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <title>Formulario de Alumno</title>
 </head>
 <body>
+    <?php
+        if(isset($error)) {?>
+            <div class="error"><?=$error ?></div>
+        <?php }
+        if (isset($alumno)) {
+            echo datosAlumno($alumno);
+        } 
+    ?>
     <?php include_once("componentes/formulario.php"); ?>
 </body>
-
 </html>

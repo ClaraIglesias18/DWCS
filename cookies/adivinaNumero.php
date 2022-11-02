@@ -12,7 +12,7 @@ if(!isset($_COOKIE['intentos'])) {
     $intentos = $_COOKIE['intentos'];
 }
 
-if ($_SERVER["REQUEST_METHOD"] == "POST"){
+if ($_SERVER["REQUEST_METHOD"] == "POST" && $intentos > 1){
     if($_POST['numero'] > $_COOKIE['numAl']) {
         $salida = "El numero introducido es mayor";
     } else if($_POST['numero'] < $_COOKIE['numAl']) {
@@ -22,10 +22,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
     }
 
     $intentos--;
-    $salida += " Intentos restantes: " . $intentos;
-    setcookie('intentos', $intentos, time() + 3600); 
-} else if($intentos == 0){
-    $salida = "No te quedan mas intentos, el numero era: " + $_COOKIE['numAl'];
+    $salida .= " Intentos restantes: " . $intentos;
+    setcookie('intentos', $intentos, time() + 3600);
+} else if($intentos == 1){
+    $salida = "No te quedan mas intentos, el numero era: " . $_COOKIE['numAl'];
 }
 
 ?>
@@ -39,7 +39,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
 </head>
 <body>
     <h1>Adivina el numero</h1>
-    <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
+    <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
         <input type="number" name="numero" id="numero">
         <input type="submit" name="Enviar">
     </form>

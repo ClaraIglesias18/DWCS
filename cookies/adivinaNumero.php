@@ -1,49 +1,72 @@
 <?php
-$intentos = 5;
-$salida = "Te quedan ".$intentos. " intentos";
+$minimo = 1;
+$maximo = 100;
 
-if(!isset($_COOKIE['numAl'])) {
-    setcookie('numAl', random_int(0, 100), time() + 3600);
+function nuevaPartida(&$secreto,&$intentos) {
+    $secreto = random_int(1,100);
+    setcookie("secreto",$secreto,time()+3600);
+    $intentos = 0;
+    setcookie("intentos",$intentos,time()+3600);
 }
 
-if(!isset($_COOKIE['intentos'])) {
-    setcookie('intentos', $intentos, time() + 3600);
+function recuperarDatosPartida(&$secreto,&$intentos) {
+    $secreto = $_COOKIE["secreto"];
+    $intentos = $_COOKIE["intentos"];
+}
+
+function actualizarIntentos(&$intentos) {
+    $intentos++;
+    setcookie("intentos",$intentos,time()+3600);
+}
+
+if (!isset($_COOKIE["secreto"]) || !isset($_COOKIE["intentos"])) {
+    nuevaPartida($secreto,$intentos);
 } else {
-    $intentos = $_COOKIE['intentos'];
+    recuperarDatosPartida($secreto,$intentos);
 }
 
-if ($_SERVER["REQUEST_METHOD"] == "POST" && $intentos > 1){
-    if($_POST['numero'] > $_COOKIE['numAl']) {
-        $salida = "El numero introducido es mayor";
-    } else if($_POST['numero'] < $_COOKIE['numAl']) {
-        $salida = "El numero introducido es menor";
+if($_SERVER["REQUEST_METHOD"]=="POST" && isset($_POST["numero"])) {
+    $numero =  $_POST["numero"];
+    //Controlar intentos
+    actualizarIntentos($intentos);
+    if ($intentos >= 5) {
+        $mensaje = "Ha superado el número de intentos, el número era: ".$secreto;    
+        nuevaPartida($secreto,$intentos);
     } else {
-        $salida = "Enhorabuena has acertado!";
+        //Menor
+        if($numero  < $secreto) {
+            $mensaje = "El número es mayor que: ".$numero ;
+        }
+        //Mayor
+        if($numero  > $secreto) {
+            $mensaje = "El número es menor que: ".$numero ;
+        }
+        //Igual
+        if($numero  == $secreto) {
+            $mensaje = "Has acertado el número era: ".$numero ;
+            nuevaPartida($secreto,$intentos);
+        }
     }
-
-    $intentos--;
-    $salida .= " Intentos restantes: " . $intentos;
-    setcookie('intentos', $intentos, time() + 3600);
-} else if($intentos == 1){
-    $salida = "No te quedan mas intentos, el numero era: " . $_COOKIE['numAl'];
 }
 
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Adivina numero</title>
+    <title>Document</title>
 </head>
 <body>
-    <h1>Adivina el numero</h1>
-    <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
-        <input type="number" name="numero" id="numero">
-        <input type="submit" name="Enviar">
+    <h1>Cookies</h1>
+    <p>Numero de intentos: <?=$intentos?></p>
+    <p><?=(isset($mensaje))?$mensaje:""    ?></p>
+    <form action="" method="post">
+        <label for="numero">número</label>
+        <input type="number" name="numero" min="<?=$minimo?>" max="<?=$maximo?>" id="numero">
+        <input type="submit" value="Comprobar">
     </form>
-    <?=$salida?>
-
+    <?=$secreto?>
 </body>
 </html>

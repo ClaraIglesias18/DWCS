@@ -1,9 +1,9 @@
 <?php
 $minimo = 1;
-$maximo = 100;
+$maximo = 20;
 
 function nuevaPartida(&$secreto,&$intentos) {
-    $secreto = random_int(1,100);
+    $secreto = random_int(1,20);
     setcookie("secreto",$secreto,time()+3600);
     $intentos = 0;
     setcookie("intentos",$intentos,time()+3600);
@@ -19,9 +19,12 @@ function actualizarIntentos(&$intentos) {
     setcookie("intentos",$intentos,time()+3600);
 }
 
+//control de cokies 
 if (!isset($_COOKIE["secreto"]) || !isset($_COOKIE["intentos"])) {
+    //si no estan establecidas las cookies se crean con la funcion
     nuevaPartida($secreto,$intentos);
 } else {
+    //se recuperan los anterioes datos de las variables
     recuperarDatosPartida($secreto,$intentos);
 }
 
@@ -67,6 +70,5 @@ if($_SERVER["REQUEST_METHOD"]=="POST" && isset($_POST["numero"])) {
         <input type="number" name="numero" min="<?=$minimo?>" max="<?=$maximo?>" id="numero">
         <input type="submit" value="Comprobar">
     </form>
-    <?=$secreto?>
 </body>
 </html>

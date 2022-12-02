@@ -8,35 +8,33 @@ require_once('Envio.php');
 class Correo {
     private $destinatario;
     private $host;
-    private $origen;
-    private $asunto;
-    private $cuerpo;
+    private $mail;
 
     public function __construct($host = "10.10.32.132", $destinatario = "destino@servidor.com"){
         $this->host = $host;
         $this->destinatario = $destinatario;
         
-        $mail = new PHPMailer();
+        $this->mail = new PHPMailer();
 
-        $mail->IsSMTP();
-        $mail->SMTPDebug = 2;
-        $mail->SMTPAuth = false;
-        $mail->Host = $host;
-        $mail->Port= 25;
-        $mail->Username = "";
-        $mail->Password = "";
-        $mail->AddAddress($destinatario, "Test");
+        $this->mail->IsSMTP();
+        $this->mail->SMTPDebug = 2;
+        $this->mail->SMTPAuth = false;
+        $this->mail->Host = $host;
+        $this->mail->Port= 25;
+        $this->mail->Username = "";
+        $this->mail->Password = "";
+        $this->mail->AddAddress($destinatario, "Test");
         
     
     }
 
-    public function enviar(Envio $envio) {
+    public function enviar($envio) {
 
-        $mail->SetFrom($envio->getOrigen(), 'Test');
-        $mail->Subject = $envio->getAsunto();
-        $mail->MsgHTML($envio->getCuerpo());
+        $this->mail->SetFrom($envio->getOrigen(), 'Test');
+        $this->mail->Subject = $envio->getAsunto();
+        $this->mail->MsgHTML($envio->getCuerpo());
 
-        $result = $mail->Send();
+        $result = $this->mail->Send();
 
         return $result;
     }

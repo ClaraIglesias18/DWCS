@@ -1,15 +1,13 @@
 <?php
 class Usuario
 {
-    private $idUuario;
     private $nombre;
     private $apellidos;
     private $correo;
     private $contraseña;
 
-    public function __construct($idUsuario, $nombre, $apellidos, $correo, $contraseña)
+    public function __construct($nombre, $apellidos, $correo, $contraseña)
     {
-        $this->idUuario = $idUsuario;
         $this->nombre = $nombre;
         $this->apellidos = $apellidos;
         $this->correo = $correo;

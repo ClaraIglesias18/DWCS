@@ -1,5 +1,6 @@
 <?php
 include_once("usuario.php");
+session_start();
 $salida = "";
 $dsn = "mysql:dbname=docker_demo;host=docker-mysql";
 $usuario = "root";
@@ -10,19 +11,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['correo']) && isset($_P
     $correo = $_POST['correo'];
     $contraseña = $_POST['contraseña'];
     $bd = new PDO($dsn, $usuario, $password);        
-    $sql = "select * from usuario where correo = '$correo' && password = '$contraseña';";
-    
-    $resultado = $bd->query($sql);
+    $stm = $bd->prepare("SELECT * from usuario where correo = :correo and password = :password limit 1");
 
-    if($resultado->rowCount() == 1) {
+    $stm->execute([":correo"=>$correo,":password"=>$passwd]);
+
+    if($stm->rowCount() == 1) {
         $user = $resultado->fetch();
-        $usuario = new Usuario($user['idUsuario'], $user['nombre'], $user['apellidos'], $user['correo'], $user['password']);
+        $usuario = new Usuario($user['nombre'], $user['apellidos'], $user['correo'], $user['password']);
         if(!$usuario->validarUsuario($correo, $contraseña)) {
             $salida = "Usuario y/o contraseña incorrectos";
         } else {
             $salida = "Login correcto";
             $_SESSION['correo'] = $usuario->getCorreo();
-            header('Location: privado.php');
+            header('Location: index.php');
             exit();
         }
     } else {
@@ -45,8 +46,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['correo']) && isset($_P
   <input type="text" id="correo" name="correo"><br>
   <label for="contraseña">Contraseña:</label><br>
   <input type="contraseña" id="contraseña" name="contraseña"><br><br>
-  <input type="submit" value="Submit">
+  <input type="submit" value="Iniciar sesion">
 </form> 
+<br>
 
 <?=$salida?>
 </body>

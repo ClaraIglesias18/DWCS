@@ -1,16 +1,41 @@
 <?php
-session_start();
+if (session_status() != PHP_SESSION_ACTIVE) {
+    session_start();
+}
+
 $salida = "";
 
 if(!isset($_SESSION['correo'])) {
     header('Location: login.php');
     exit();
-} else {
-    //crear usuario
-    $salida = "PRIVADO";
+} 
 
-    if($_SERVER("REQUEST_METHOD") == "POST" && isset($_POST['nombre']) && isset($_POST['apellidos']) && isset($_POST['correo']) && isset($_POST['contraseña']))
-}
+$salida = "PRIVADO";
+
+if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['nombre']) && isset($_POST['apellidos']) && isset($_POST['correo']) && isset($_POST['contraseña'])) {
+    //crear usuario
+    $dsn = "mysql:dbname=docker_demo;host=docker-mysql";
+    $usuario ="root";
+    $password = "root123";
+    $bd = new PDO($dsn, $usuario, $password);
+    $nombre = $_POST['nombre'];
+    $apellidos = $_POST['apellidos'];
+    $correo = $_POST['correo'];
+    $contraseña = $_POST['contraseña'];
+
+    //$usuario = new Usuario($nombre, $apellidos, $correo, $contraseña);
+
+    $stm = $bd->prepare("INSERT INTO usuario(nombre, apellidos, correo, password) VALUES(:nombre, :apellidos, :correo, :contraseña)");
+    $stm->execute([":nombre"=>$nombre, ":apellidos"=>$apellidos, ":correo"=>$correo, ":contraseña"=>$contraseña]);
+
+    if($stm->rowCount() == 1) {
+        $salida = "Usuario creado con exito";
+    } else {
+        $salida = "Error al crear un usuario";
+    }
+
+    }
+
 ?>
 
 
@@ -32,7 +57,7 @@ if(!isset($_SESSION['correo'])) {
         <input type="email" id="correo" name="correo"><br>
         <label for="contraseña">Contraseña:</label><br>
         <input type="password" id="contraseña" name="contraseña"><br><br>
-        <input type="submit" value="Submit">
+        <input type="submit" value="Crear usuario">
     </form>
 </body>
 </html>

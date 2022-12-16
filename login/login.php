@@ -1,54 +1,57 @@
 <?php
-include_once("usuario.php");
+require_once("usuario.php");
+require_once("BD.php");
 session_start();
-$salida = "";
-$dsn = "mysql:dbname=docker_demo;host=docker-mysql";
-$usuario = "root";
-$password = "root123";
+$mensaje ="";
+if ($_SERVER["REQUEST_METHOD"]== "POST" && isset($_POST["correo"])&& isset($_POST["password"]) ) {
+    $correo = $_POST["correo"];
+    $passwd = $_POST["password"];
+    $bd = BD::getConexion();
+   // $sql = "select * from usuario where correo='$correo' and password='$passwd' limit 1";
+    //echo $sql;
+    //$datos = $bd->query($sql); //JAMAS NO USAR
 
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['correo']) && isset($_POST['contraseña'])) {
+    $stm = $bd->prepare("SELECT * from usuario where correo = :correo  limit 1");
+    $stm->execute([":correo"=>$correo]);
 
-    $correo = $_POST['correo'];
-    $contraseña = $_POST['contraseña'];
-    $bd = new PDO($dsn, $usuario, $password);        
-    $stm = $bd->prepare("SELECT * from usuario where correo = :correo and password = :password limit 1");
-
-    $stm->execute([":correo"=>$correo,":password"=>$passwd]);
-
-    if($stm->rowCount() == 1) {
-        $user = $resultado->fetch();
-        $usuario = new Usuario($user['nombre'], $user['apellidos'], $user['correo'], $user['password']);
-        if(!$usuario->validarUsuario($correo, $contraseña)) {
-            $salida = "Usuario y/o contraseña incorrectos";
+    if ($stm->rowCount() == 1) {
+        $_SESSION["correo"] = $correo;
+        $user = $stm->fetch();
+        $usuario = new Usuario($user["idUsuario"],$user["nombre"],$user["apellidos"],$user["correo"],$user["password"]);
+        if (!$usuario->comprobarValidarUsuario($correo, $passwd)){
+            $mensaje = "Usuario y/o contraseña incorrectos verificado";
         } else {
-            $salida = "Login correcto";
-            $_SESSION['correo'] = $usuario->getCorreo();
-            header('Location: index.php');
+            $_SESSION["usuario"]["idUsuario"] = $usuario->getIdUsuario();
+            $_SESSION["usuario"]["nombre"] = $usuario->getNombre();
+            header("location:index.php");
             exit();
         }
+
+        var_dump($usuario);
     } else {
-        $salida = "El usuario no se encuentra en la base de datos";
+        $mensaje = "Usuario y/o contraseña incorrectos";
     }
+
+
 }
 ?>
-
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
-<title>Formulario de login</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>login</title>
 </head>
 <body>
-
-<h1>Login</h1>
-
-<form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
-  <label for="correo">Correo:</label><br>
-  <input type="text" id="correo" name="correo"><br>
-  <label for="contraseña">Contraseña:</label><br>
-  <input type="contraseña" id="contraseña" name="contraseña"><br><br>
-  <input type="submit" value="Iniciar sesion">
-</form> 
-<br>
-
-<?=$salida?>
+    <div><?=$mensaje?></div>
+    <form action="" method="post">
+        <label for="correo">Correo:</label>
+        <input type="text" name="correo" id="correo" required>
+        <label for="password">Password:</label>
+        <input type="password" name="password" id="password"  required>
+        <input type="submit" value="Entrar">
+    </form>
 </body>
+</html>

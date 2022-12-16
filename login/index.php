@@ -1,10 +1,11 @@
 <?php
 session_start();
-if(isset($_SESSION['correo'])){
-    header('Location: privado.php');
+if (!isset($_SESSION["usuario"])) {
+    header("location:login.php");
     exit();
 } else {
-    header('Location: login.php');
-    exit();
+    include("privado.php");
+    //header("location:privado.php");
+    //exit();
 }
 ?>

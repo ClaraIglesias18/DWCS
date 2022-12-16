@@ -1,63 +1,88 @@
 <?php
+require_once("usuario.php");
+require_once("BD.php");
 if (session_status() != PHP_SESSION_ACTIVE) {
     session_start();
 }
 
-$salida = "";
-
-if(!isset($_SESSION['correo'])) {
-    header('Location: login.php');
+if (!isset($_SESSION["usuario"])) {
+    header("location:login.php");
     exit();
-} 
+}
 
-$salida = "PRIVADO";
+$bd = BD::getConexion();
+/*
+echo $hash = password_hash("12345",PASSWORD_DEFAULT);
+if (password_verify("12345",$hash)) {
+    echo "Acceso verificado";
+} else {
+    echo "acceso denegado";
+}
+*/
+///////////////////////////////////
 
-if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['nombre']) && isset($_POST['apellidos']) && isset($_POST['correo']) && isset($_POST['contraseña'])) {
-    //crear usuario
-    $dsn = "mysql:dbname=docker_demo;host=docker-mysql";
-    $usuario ="root";
-    $password = "root123";
-    $bd = new PDO($dsn, $usuario, $password);
-    $nombre = $_POST['nombre'];
-    $apellidos = $_POST['apellidos'];
-    $correo = $_POST['correo'];
-    $contraseña = $_POST['contraseña'];
-
-    //$usuario = new Usuario($nombre, $apellidos, $correo, $contraseña);
-
-    $stm = $bd->prepare("INSERT INTO usuario(nombre, apellidos, correo, password) VALUES(:nombre, :apellidos, :correo, :contraseña)");
-    $stm->execute([":nombre"=>$nombre, ":apellidos"=>$apellidos, ":correo"=>$correo, ":contraseña"=>$contraseña]);
-
-    if($stm->rowCount() == 1) {
-        $salida = "Usuario creado con exito";
-    } else {
-        $salida = "Error al crear un usuario";
+$mensaje = null;
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["Guardar"])) {
+    $usuario = new Usuario(null, $_POST["nombre"], $_POST["apellidos"], $_POST["correo"], $_POST["password"], true);
+    try {
+        $stmt = $bd->prepare("INSERT INTO usuario(nombre, apellidos, correo, password) VALUES (:nombre, :apellidos, :correo, :password)");
+        $stmt->execute([
+            ":nombre" => $usuario->getNombre(),
+            ":apellidos" => $usuario->getApellidos(),
+            ":correo" => $usuario->getCorreo(),
+            ":password" => $usuario->getPassword()
+        ]);
+        $mensaje = "Usuario creado";
+        unset($usuario);
+    } catch (Exception $e) {
+        $mensaje = $e->getMessage();
     }
+}
 
-    }
+//LISTAR USUARIOS
+$stm = $bd->prepare("SELECT * FROM usuario");
+$stm->execute();
+$tabla = "<form action='delete.php' method='post'>";
+$tabla .= "<table>";
+$tabla .= "<tr><td><strong>Nombre</strong></td><td><strong>Apellidos</strong></td><td><strong>Correo</strong></td></tr>";
+while ($row = $stm->fetch(PDO::FETCH_ASSOC)) {
+    $tabla .= "<tr>";
+    $tabla .= "<td>" . $row['nombre'] . "</td>";
+    $tabla .= "<td>" . $row['apellidos'] . "</td>";
+    $tabla .= "<td>" . $row['correo'] . "</td>";
+    $tabla .= "<td><a href='eliminar.php?id=' </td>";
+    $tabla .= "<td> /td>";
+}
+$tabla .= "</table>";
+$tabla .= "</form>"
 
 ?>
-
-
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Privado</title>
+    <title>Document</title>
 </head>
+
 <body>
-    <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="POST">
-        <label for="nombre">Nombre:</label><br>
-        <input type="text" id="nombre" name="nombre"><br>
-        <label for="apellidos">Apellidos:</label><br>
-        <input type="text" id="apellidos" name="apellidos"><br>
-        <label for="correo">Correo:</label><br>
-        <input type="email" id="correo" name="correo"><br>
-        <label for="contraseña">Contraseña:</label><br>
-        <input type="password" id="contraseña" name="contraseña"><br><br>
-        <input type="submit" value="Crear usuario">
+    <h1>Alta usuarios</h1>
+    <div><?= $mensaje ?></div>
+    <form action="" method="POST">
+        <label for="nombre">Nombre:</label>
+        <input type="text" name="nombre" id="nombre" required value="<?= (isset($usuario)) ? $usuario->getNombre() : "" ?>">
+        <label for="apellidos">Apellidos:</label>
+        <input type="text" name="apellidos" id="apellidos" required value="<?= (isset($usuario)) ? $usuario->getApellidos() : "" ?>">
+        <label for="correo">Correo:</label>
+        <input type="text" name="correo" id="correo" required value="<?= (isset($usuario)) ? $usuario->getCorreo() : "" ?>">
+        <label for="password">Password:</label>
+        <input type="password" name="password" id="password" required value="<?= (isset($usuario)) ? $usuario->getPassword() : "" ?>">
+        <input type="submit" name="Guardar" value="Guardar">
     </form>
+    <h1>Lista Usuarios</h1>
+    <?= $tabla ?>
 </body>
+
 </html>

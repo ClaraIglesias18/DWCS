@@ -1,30 +1,68 @@
 <?php
-class Usuario
-{
+class Usuario {
+
+    private $idUsuario;
     private $nombre;
     private $apellidos;
     private $correo;
-    private $contraseña;
+    private $password;
 
-    public function __construct($nombre, $apellidos, $correo, $contraseña)
+    public function __construct($idUsuario,$nombre,$apellidos,$correo,$password,$encriptar=true)
     {
+        $this->idUsuario = $idUsuario;
         $this->nombre = $nombre;
         $this->apellidos = $apellidos;
         $this->correo = $correo;
-        $this->contraseña = $contraseña;
+        if ($encriptar) {
+            $this->password = password_hash($_POST["password"],PASSWORD_DEFAULT);
+        }else {
+            $this->password = $password;
+        }
+        
+
     }
 
-    public function validarUsuario($correo, $contraseña)
+    public function comprobarValidarUsuario($correo, $contraseña) {
+        return  password_verify($contraseña,$this->password) && $correo == $this->correo;
+    }
+    
+
+    /**
+     * Get the value of idUsuario
+     */ 
+    public function getIdUsuario()
     {
-        return $this->correo == $correo && $this->contraseña == $contraseña;
+        return $this->idUsuario;
+    }
+
+    /**
+     * Get the value of nombre
+     */ 
+    public function getNombre()
+    {
+        return $this->nombre;
+    }
+
+    /**
+     * Get the value of apellidos
+     */ 
+    public function getApellidos()
+    {
+        return $this->apellidos;
     }
 
     /**
      * Get the value of correo
-     */
+     */ 
     public function getCorreo()
     {
         return $this->correo;
     }
+    /**
+     * Get the value of password
+     */ 
+    public function getPassword()
+    {
+        return $this->password;
+    }
 }
-?>

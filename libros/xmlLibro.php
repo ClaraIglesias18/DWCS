@@ -3,6 +3,15 @@
 
     class xmlLibro extends Libro {
 
+        public function __construct(private $xmlDoc, private $xsltDoc = null) {
+            
+            if(!is_null($this->xsltDoc)) {
+                $this->load($xsltDoc);
+            }
+
+            $this->xmlDoc = $this->load($xmlDoc);
+        }
+
         public static function getLibro($xmlLibro){
             $libro = new Libro(
                 $xmlLibro->attributes->getNamedItem('id')->nodeValue,
@@ -17,18 +26,18 @@
             return $libro;
         }
 
-        public static function appendLibro($xmlDoc, $libro){
+        public function appendLibro($libro){
             
-            $catalogo = $xmlDoc->documentElement;
+            $catalogo = $this->xmlDoc->documentElement;
 
-            $book = $xmlDoc->createElement("book");
-            $book->setAttribute("id", $libro[0]);
-            $author = $xmlDoc->createElement("author", $libro[2]);
-            $title = $xmlDoc->createElement("title", $libro[3]);
-            $genre = $xmlDoc->createElement("genre", $libro[4]);
-            $price = $xmlDoc->createElement("price", $libro[5]);
-            $publish_date = $xmlDoc->createElement("publish_date", $libro[6]);
-            $description = $xmlDoc->createElement("description", $libro[7]);
+            $book = $this->xmlDoc->createElement("book");
+            $book->setAttribute("id", $libro->getId());
+            $author = $this->xmlDoc->createElement("author", $libro->getAutor());
+            $title = $this->xmlDoc->createElement("title", $libro->getTitle());
+            $genre = $this->xmlDoc->createElement("genre", $libro->getGenre());
+            $price = $this->xmlDoc->createElement("price", $libro->getPrice());
+            $publish_date = $this->xmlDoc->createElement("publish_date", $libro->getPublishDate());
+            $description = $this->xmlDoc->createElement("description", $libro->getDescription());
 
             $catalogo->appendChild($book);
             $book->appendChild($author);
@@ -38,9 +47,32 @@
             $book->appendChild($publish_date);
             $book->appendChild($description);
 
-            return $xmlDoc;
+            return $this->xmlDoc;
 
-        }   
+        }
+        
+
+        public static function toHtml($xmlDoc, $xsltDoc) {
+            
+            $procesador = new XSLTProcessor();
+            $procesador->importStylesheet($xsltDoc);
+
+            $transformada = $procesador->transformToXml($xmlDoc);
+
+            return $transformada;
+
+        }
+
+
+        public function load($xmlDoc) {
+            $documento = new DOMDocument();
+            $documento->load(dirname(__FILE__)."/$xmlDoc");
+            return $documento;
+        }
+
+        public function saveXml($ruta) {
+            $this->xmlDoc->save(dirname(__FILE__)."/$ruta");
+        }
 
     }
 

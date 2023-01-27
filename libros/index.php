@@ -3,9 +3,7 @@
     require_once(dirname(__FILE__).'/xmlLibro.php');
     
     $libros = [];
-    $xmlLibros = new DOMDocument();
-    $xmlLibros->load(dirname(__FILE__).'/libros.xml');
-    $catalogo = $xmlLibros->documentElement;
+    $xmlLibro = new xmlLibro("libro_1.xml", "libro.xslt");
 
     /*$librosXML = $xmlLibros->getElementsByTagName('book');
     foreach($librosXML as $libro) {
@@ -13,10 +11,13 @@
     };*/
 
 
-    $libro = ["0", "prueba", "clara", "libro de prueba", "genero de prueba", "999$", "26/01/23", "esto es un libro de prueba"];
+    $libro = new Libro("44", "prueba1", "clara", "libro de prueba", "genero de prueba", "999$", "26/01/23", "esto es un libro de prueba");
 
-    $nuevoDoc = xmlLibro::appendLibro($xmlLibros, $libro);
-    $nuevoDoc->save(dirname(__FILE__)."/libros_1.xml");
-    //var_dump($nuevoCatalogo);
+    /*$nuevoDoc = $xmlLibro->appendLibro($libro);
+    $xmlLibro->saveXml($nuevoDoc, "libros_1.xml");
+    
+    $xmlLibros = $xmlLibro->load("libros_1.xml");
+    echo xmlLibro::toHtml($xmlLibros, $xslDoc);
+*/
 
 ?>

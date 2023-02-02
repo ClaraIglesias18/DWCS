@@ -5,14 +5,14 @@
 
         public function __construct(private $xmlDoc, private $xsltDoc = null) {
             
-            if(!is_null($this->xsltDoc)) {
-                $this->load($xsltDoc);
+            if(!is_null($xsltDoc)) {
+                $this->xsltDoc = $this->cargar($xsltDoc);
             }
 
-            $this->xmlDoc = $this->load($xmlDoc);
+            $this->xmlDoc = $this->cargar($xmlDoc);
         }
 
-        public static function getLibro($xmlLibro){
+        public function getLibro($xmlLibro){
             $libro = new Libro(
                 $xmlLibro->attributes->getNamedItem('id')->nodeValue,
                 $xmlLibro->getElementsByTagName('author')->item(0)->textcontent,
@@ -52,19 +52,19 @@
         }
         
 
-        public static function toHtml($xmlDoc, $xsltDoc) {
+        public function toHtml() {
             
             $procesador = new XSLTProcessor();
-            $procesador->importStylesheet($xsltDoc);
+            $procesador->importStylesheet($this->xsltDoc);
 
-            $transformada = $procesador->transformToXml($xmlDoc);
+            $transformada = $procesador->transformToXml($this->xmlDoc);
 
             return $transformada;
 
         }
 
 
-        public function load($xmlDoc) {
+        public function cargar($xmlDoc) {
             $documento = new DOMDocument();
             $documento->load(dirname(__FILE__)."/$xmlDoc");
             return $documento;

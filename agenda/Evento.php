@@ -101,5 +101,26 @@
 
                 return $this;
         }
+
+        public function __serialize(): array
+        {
+                return [
+                        'id_evento' => $this->id_evento,
+                        'id_usuario' => $this->id_usuario,
+                        'nombre' => $this->nombre,
+                        'fecha_inicio' => $this->fecha_inicio,
+                        'fecha_fin' => $this->fecha_fin
+                ];
+        }
+
+        public function __unserialize(array $data): void
+        {
+                $this->id_evento = $data['id_evento'];
+                $this->id_usuario = $data['id_usuario'];
+                $this->nombre = $data['nombre'];
+                $this->fecha_inicio = $data['fecha_inicio'];
+                $this->fecha_fin = $data['fecha_fin'];
+        }
+        
     }
 ?>

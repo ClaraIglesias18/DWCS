@@ -15,7 +15,7 @@ $evento = $_SESSION['evento'];
 if(!isset($_SESSION['eventos'])) {
     $eventos = [];
 } else {
-    $eventos = $_SESSION['eventos'];
+    $eventos = unserialize($_SESSION['eventos']);
 }
 $salida = " ";
 
@@ -33,16 +33,21 @@ if ($_SERVER["REQUEST_METHOD"]== "POST" && isset($_POST['nombre'])&& isset($_POS
     $evento = new Evento(0, null, $nombre, $fecha_inicio, $fecha_fin);
 
     array_push($eventos, $evento);
-    $_SESSION['eventos'] = $eventos;
+    $_SESSION['eventos'] = serialize($eventos);
 
-    //fallo al llamar a los metodos del objeto
-    foreach($eventos as $evento) {
-        $salida .= $evento->getNombre()
-                    .$evento->getFechaInicio()->format('d-m-Y')
-                    .$evento->getFechaFin()->format('d-m-Y')
-                    . "</br>"; 
-    }
+    
 }
+
+foreach($eventos as $valor) {
+
+    $salida .= $valor->getNombre() . "  "
+                .$valor->getFechaInicio()->format('d-m-Y H:i') . " -> "
+                .$valor->getFechaFin()->format('d-m-Y H:i') . " "
+                . '<a href="eliminar.php?id='. $valor->getIdEvento() .'">Eliminar</a>' . " "
+                . '<a href="editar.php?id='. $valor->getIdEvento() .'">Editar</a>'
+                . "</br>"; 
+}
+
 
 
 ?>
@@ -52,6 +57,7 @@ if ($_SERVER["REQUEST_METHOD"]== "POST" && isset($_POST['nombre'])&& isset($_POS
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="vendor/twbs/bootstrap/dist/css/bootstrap.min.css">
     <title>Agenda</title>
 </head>
 <body>
@@ -61,10 +67,10 @@ if ($_SERVER["REQUEST_METHOD"]== "POST" && isset($_POST['nombre'])&& isset($_POS
         <label for="nombre">Nombre:</label>
         <input type="text" name="nombre" id="nombre" required>
         <label for="fecha_inicio">Fecha de inicio:</label>
-        <input type="date" name="fecha_inicio" id="fecha_inicio"  required>
+        <input type="datetime-local" name="fecha_inicio" id="fecha_inicio"  required>
         <label for="fecha_fin">Fecha de fin:</label>
-        <input type="date" name="fecha_fin" id="fecha_fin">
-        <input type="submit" value="Entrar">
+        <input type="datetime-local" name="fecha_fin" id="fecha_fin">
+        <input type="submit" value="Agregar">
     </form>
     </br>
     <div>

@@ -21,15 +21,12 @@
         }
 
         public function comprobarUsuario($correo, $password) {
-            try {
                 $bd = ConexionMysql::getConexion();
                 $sql = "SELECT * from evento where correo = '$correo' AND password = '$password'";
                 $stm = $bd->prepare($sql);
                 $stm->execute();
 
-            } catch (Exception $e) {
-                return $e->getMessage(); 
-            }
+                return $stm;
         }
     }
 ?>

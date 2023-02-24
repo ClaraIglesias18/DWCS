@@ -31,6 +31,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['correo']) && isset($_P
     $password = $_POST['password'];
 
     if ($usuario->comprobarUsuario($correo, $password)) {
+        
+        
+
         $_SESSION['usuario'] = $correo;
         $mensaje = "Usuario registrado";
         header("location:index.php");

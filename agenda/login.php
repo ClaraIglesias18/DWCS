@@ -1,15 +1,27 @@
 <?php
 require_once('Usuario.php');
 require_once('Evento.php');
+require_once('UsuarioMysql.php');
+require_once('SelectorPersistente.php');
 session_start();
-$mensaje = "";
 
+if (!isset($_SESSION['bdd'])) {
+    header("location:selector.php");
+    exit();
+} else {
+    $usuario = SelectorPersistente::getUsuarioPersistente($_SESSION['bdd']);
+}
+
+
+
+$mensaje = "";
+/*
 $usuario = new Usuario(3, "clara", "clara@gmail.com", "abc123.", 0, true);
 $evento = new Evento(null, null, "Evento 1");
-
-$_SESSION['usuario'] = $usuario;
+*/
+/*$_SESSION['usuario'] = $usuario;
 $_SESSION['evento'] = $evento;
-
+*/
 //$mensaje = var_dump($_SESSION['usuario']);
 
 
@@ -17,14 +29,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['correo']) && isset($_P
 
     $correo = $_POST['correo'];
     $password = $_POST['password'];
-    $usuario = $_SESSION['usuario'];
 
-    if ($usuario->validarUsuario($correo, $password)) {
+    if ($usuario->comprobarUsuario($correo, $password)) {
+        $_SESSION['usuario'] = $correo;
         $mensaje = "Usuario registrado";
         header("location:index.php");
+        exit();
     } else {
         $mensaje = "Usuario no registrado";
     }
+
 }
 ?>
 <!DOCTYPE html>

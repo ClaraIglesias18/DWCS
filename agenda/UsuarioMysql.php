@@ -6,6 +6,7 @@
 
         public function guardar($usuario) {
             
+
         }
 
         public function eliminar($usuario) {
@@ -16,17 +17,20 @@
 
         }
 
-        public function listar($usuario) {
+        public function listar() {
 
         }
 
         public function comprobarUsuario($correo, $password) {
+
                 $bd = ConexionMysql::getConexion();
-                $sql = "SELECT * from evento where correo = '$correo' AND password = '$password'";
+                $sql = "SELECT * from usuario where correo = '$correo' AND password = '$password'";
                 $stm = $bd->prepare($sql);
                 $stm->execute();
+                $result = $stm -> fetchAll(PDO::FETCH_OBJ);
 
-                return $stm;
+                return $result;
+
         }
     }
 ?>

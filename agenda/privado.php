@@ -1,5 +1,6 @@
 <?php
 require_once('Evento.php');
+require_once('SelectorPersistente.php');
 
 if (session_status() != PHP_SESSION_ACTIVE) {
     session_start();
@@ -10,8 +11,10 @@ if (!isset($_SESSION['usuario'])) {
     exit();
 }
 
+$evento = new EventoMysql;
+
 $usuario = $_SESSION['usuario'];
-$evento = $_SESSION['evento'];
+
 if(!isset($_SESSION['eventos'])) {
     $eventos = [];
 } else {
@@ -30,22 +33,19 @@ if ($_SERVER["REQUEST_METHOD"]== "POST" && isset($_POST['nombre'])&& isset($_POS
         $fecha_fin = new DateTime($_POST['fecha_fin']);
     }
 
-    $evento = new Evento(0, null, $nombre, $fecha_inicio, $fecha_fin);
+    $eventoObj = new Evento(0, null, $nombre, $fecha_inicio, $fecha_fin);
 
-    array_push($eventos, $evento);
-    $_SESSION['eventos'] = serialize($eventos);
+    $evento = SelectorPersistente::getEventoPersistente();
+
+    $evento->guardar($eventoObj);
 
     
 }
 
-foreach($eventos as $valor) {
+foreach($evento->listar() as $evento) {
 
-    $salida .= $valor->getNombre() . "  "
-                .$valor->getFechaInicio()->format('d-m-Y H:i') . " -> "
-                .$valor->getFechaFin()->format('d-m-Y H:i') . " "
-                . '<a href="eliminar.php?id='. $valor->getIdEvento() .'">Eliminar</a>' . " "
-                . '<a href="editar.php?id='. $valor->getIdEvento() .'">Editar</a>'
-                . "</br>"; 
+    $salida .= $evento . "</br>";
+
 }
 
 

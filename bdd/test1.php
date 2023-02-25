@@ -1,5 +1,5 @@
 <?php
-    $dsn = "mysql:dbname=docker_demo;host=docker-mysql";
+    $dsn = "mysql:dbname=usuario;host=docker-mysql";
     $usuario = "root";
     $password = "root123";
     try {

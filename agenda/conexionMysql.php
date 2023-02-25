@@ -1,33 +1,25 @@
 <?php
 
 class ConexionMysql {
-    private $dsn = "mysql:dbname=docker_demo;host=docker-mysql";
-    private $usuario = "root";
-    private $password = "root123";
-    private $bd;
+
     private static $instancia;
 
+    private function __construct(){
+
+    }
+
     public static function getConexion() {
-        
-        if(!self::$instancia) {
-            self::$instancia = new ConexionMysql();
-        }
+        if (!isset(self::$instancia)) {
+            
+            $dsn = "mysql:dbname=agenda;host=docker-mysql";
+            $usuario ="root";
+            $password = "root123";
 
-        return self::$instancia->bd;
-    }
-
-    private function __construct() {
-        
-        try {
-            $this->bd = new PDO($this->dsn, $this->usuario, $this->password);
-        }catch (Exception $e) {
-            return $e->getMessage();
+            self::$instancia = new PDO($dsn, $usuario, $password);
+            self::$instancia->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         }
         
-    }
-
-    public function getBd() {
-        return $this->bd;
+        return self::$instancia;
     }
  
 }

@@ -30,16 +30,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['correo']) && isset($_P
     $correo = $_POST['correo'];
     $password = $_POST['password'];
 
-    if ($usuario->comprobarUsuario($correo, $password)) {
-        
-        
+    //valida si se ejecuto la consulta
+    if ($usuario->comprobarUsuario($correo, $password) != null) {
 
         $_SESSION['usuario'] = $correo;
         $mensaje = "Usuario registrado";
         header("location:index.php");
         exit();
     } else {
-        $mensaje = "Usuario no registrado";
+        $mensaje = "Usuario o contraseña incorrectos";
     }
 
 }

@@ -1,21 +1,31 @@
 <?php
+
+    require_once('InterfazOperaciones.php');
+    require_once('Evento.php');
+    require_once('ConexionMysql.php');
+
+
     class EventoMysql implements InterfazOperaciones {
 
         private $bd;
 
         public function __construct() {
-            $dsn = "mysql:dbname=docker_demo;host=docker-mysql";
-            $usuario = "root";
-            $password = "root123";
-            $this->bd = new PDO($dsn, $usuario, $password);
+            $this->bd =  ConexionMysql::getConexion();
         }
 
         public function guardar($evento) {
             
             try {
+
+                $nombre = $evento->getNombre;
+                $fecha_inicio = $evento->getFechaInicio;
+                $fecha_fin = $evento->getFechaFin;
+                $id_usuario = $evento->getIdUsuario;
+
                 $sql = "INSERT INTO evento (nombre, fecha_inicio, fecha_fin, id_usuario) VALUES (?, ?, ?, ?)";
                 $stm = $this->bd->prepare($sql);
-                $stm->execute($evento->getNombre, $evento->getFechaInicio, $evento->getFechaFin, $evento->getIdUsuario); 
+                $stm->execute([$nombre, $fecha_inicio, $fecha_fin, $id_usuario]);
+
             } catch (Exception $e) {
                 return $e->getMessage();
             }
@@ -38,7 +48,7 @@
 
         }
 
-        public function listar($evento) {
+        public function listar() {
             try {
                 $sql = "SELECT * from evento";
                 $stm = $this->bd->prepare($sql);

@@ -22,11 +22,11 @@ session_start();
 <body>
     <h1>Seleccion de BDD</h1>
     <form action="" method="post">
-        <input type="radio" name="bdd" value="mysql">
+        <input type="radio" name="bdd" value="0">
         <label for="mysql">MySQL</label>
-        <input type="radio" name="bdd" value="mongodb">
+        <input type="radio" name="bdd" value="1">
         <label for="mongodb">MongoDB</label>
-        <input type="radio" name="bdd" value="sesiones">
+        <input type="radio" name="bdd" value="2">
         <label for="sesiones">Sesiones</label>
         <input type="submit" value="Aceptar">
     </form>

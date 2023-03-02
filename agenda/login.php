@@ -30,13 +30,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['correo']) && isset($_P
     $correo = $_POST['correo'];
     $password = $_POST['password'];
 
-    //valida si se ejecuto la consulta
     if ($usuario->comprobarUsuario($correo, $password) != null) {
 
+        $idUsuario = $usuario->comprobarUsuario($correo, $password)[0];
+
         $_SESSION['usuario'] = $correo;
+        $_SESSION['idUsuario'] = $idUsuario->id_usuario;
         $mensaje = "Usuario registrado";
-        header("location:index.php");
-        exit();
+        
+        if($idUsuario->rol == 1) {
+            header("location:admin.php");
+            exit();
+        } else {
+            header("location:index.php");
+            exit();
+        }
+        
     } else {
         $mensaje = "Usuario o contraseña incorrectos";
     }
@@ -65,6 +74,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['correo']) && isset($_P
         <input type="password" name="password" id="password" required>
         <input type="submit" value="Entrar">
     </form>
+    <a href="registro.php">Registrarse</a>
 </body>
 
 </html>

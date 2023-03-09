@@ -1,6 +1,6 @@
 <?php
     class Usuario {
-        public function __construct(private $id_usuario = null, private $nombre = null, private $correo = null, private $password = null, private $rol = 0, $encriptar = false) {
+        public function __construct(protected $id_usuario = null, protected $nombre = null, protected $correo = null, protected $password = null, protected $rol = 0,  $encriptar = false) {
             
             if($encriptar) {
                 $this->password = password_hash($password, PASSWORD_DEFAULT);
@@ -101,4 +101,3 @@
                 return $this;
         }
     }
-?>

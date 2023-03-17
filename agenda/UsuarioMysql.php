@@ -75,9 +75,8 @@ class UsuarioMysql implements InterfazOperaciones
         $sql = "SELECT * from usuario where correo = '$correo' AND password = '$password'";
         $stm = $bd->prepare($sql);
         $stm->execute();
-        $result = $stm->fetchAll(PDO::FETCH_OBJ);
 
-        return $result;
+        return $stm->fetchAll(PDO::FETCH_OBJ);
     }
 
     public function getUsuario($idUsuario)

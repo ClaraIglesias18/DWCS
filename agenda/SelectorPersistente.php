@@ -13,6 +13,9 @@
                 case '1':
                     return new EventoMongo;
                     break;
+                default: 
+                    return new EventoMysql;
+                    break;
             }
         }
 
@@ -24,6 +27,9 @@
                 case '1':
                     return new UsuarioMongo;
                     break;
+                default: 
+                    return new UsuarioMysql;
+                    break;                    
             }
         }
     }

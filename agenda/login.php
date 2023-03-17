@@ -3,6 +3,7 @@ require_once('Usuario.php');
 require_once('Evento.php');
 require_once('UsuarioMysql.php');
 require_once('SelectorPersistente.php');
+
 session_start();
 
 if (!isset($_SESSION['bdd'])) {
@@ -32,13 +33,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['correo']) && isset($_P
 
     if ($usuario->comprobarUsuario($correo, $password) != null) {
 
-        $idUsuario = $usuario->comprobarUsuario($correo, $password)[0];
+        $usuarioRecuperado = $usuario->comprobarUsuario($correo, $password);
 
-        $_SESSION['usuario'] = $correo;
-        $_SESSION['idUsuario'] = $idUsuario->id_usuario;
+        if($_SESSION['bdd'] == 0) {
+            $_SESSION['usuario'] = $correo;
+            $_SESSION['rol'] = $usuarioRecuperado[0]->rol;
+        } else if($_SESSION['bdd'] == 1) {
+            $_SESSION['usuario'] = $correo;
+            $_SESSION['rol'] = $usuarioRecuperado['rol'];
+        }
+        
         $mensaje = "Usuario registrado";
         
-        if($idUsuario->rol == 1) {
+        if($_SESSION['rol'] == 1) {
             header("location:admin.php");
             exit();
         } else {
@@ -52,6 +59,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['correo']) && isset($_P
 
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="es">
 

@@ -41,6 +41,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['nombre']) && isset($_P
 }
 
 foreach ($evento->listar($idUsuario) as $eventos) {
+    var_dump($eventos);
     $salida .= $eventos->getNombre() . "  " . $eventos->getFechaInicio()->format('Y-m-d H:i:s') 
         . "   " . $eventos->getFechaFin()->format('Y-m-d H:i:s') . "   " . $eventos->getIdUsuario() 
         . "    " . $eventos->getIdEvento() . "<a href='eliminar.php?idEvento=" .$eventos->getIdEvento()."'> Eliminar </a>"

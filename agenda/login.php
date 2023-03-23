@@ -34,14 +34,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['correo']) && isset($_P
     if ($usuario->comprobarUsuario($correo, $password) != null) {
 
         $usuarioRecuperado = $usuario->comprobarUsuario($correo, $password);
-
-        if($_SESSION['bdd'] == 0) {
-            $_SESSION['usuario'] = $correo;
-            $_SESSION['rol'] = $usuarioRecuperado[0]->rol;
-        } else if($_SESSION['bdd'] == 1) {
-            $_SESSION['usuario'] = $correo;
-            $_SESSION['rol'] = $usuarioRecuperado['rol'];
-        }
+        $_SESSION['rol'] = $usuarioRecuperado->getRol();
+        $_SESSION['usuario'] = $usuarioRecuperado->getCorreo(); 
+        $_SESSION['idUsuario'] = $usuarioRecuperado->getIdUsuario();
         
         $mensaje = "Usuario registrado";
         

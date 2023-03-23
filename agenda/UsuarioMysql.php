@@ -3,7 +3,7 @@ require_once('conexionMysql.php');
 require_once('InterfazOperaciones.php');
 require_once('Usuario.php');
 
-class UsuarioMysql implements InterfazOperaciones
+class UsuarioMysql extends Usuario implements InterfazOperaciones
 {
 
     private $bd;
@@ -51,19 +51,29 @@ class UsuarioMysql implements InterfazOperaciones
             return $e->getMessage();
         }
     }
-
+ 
     public function listar($usuario)
     {
         try {
-            $sql = "SELECT * from usuario where rol = 0";
+            $sql = "SELECT * from usuario where rol = ?";
             $stm = $this->bd->prepare($sql);
-            $stm->execute();
+            $stm->execute([0]);
+            $usuarios = [];
 
-            while (($r = $stm->fetch(PDO::FETCH_OBJ)) != null) {
-                $result[] = new Usuario($r->id_usuario, $r->nombre, $r->correo, $r->password);
+            if($stm->rowCount() > 0) {
+                foreach($stm->fetchAll(PDO::FETCH_CLASS, self::class) as $usuario) {
+                    $usuarios[$usuario->id_usuario] = new self($usuario->id_usuario, $usuario->nombre, $usuario->correo, $usuario->password);
+                }
             }
 
-            return $result;
+            /*
+            while (($r = $stm->fetchAll(PDO::FETCH_CLASS, self::class)) != null) {
+                $usuarios[$r->id_usuario] = new self($r->id_usuario, $r->nombre, $r->correo, $r->password);
+            }
+            */
+            var_dump($usuarios);
+
+            return $usuarios;
         } catch (Exception $e) {
             return $e->getMessage();
         }
@@ -76,7 +86,7 @@ class UsuarioMysql implements InterfazOperaciones
         $stm = $bd->prepare($sql);
         $stm->execute();
 
-        return $stm->fetchAll(PDO::FETCH_OBJ);
+        return $stm->fetchAll(PDO::FETCH_CLASS, self::class)[0];
     }
 
     public function getUsuario($idUsuario)

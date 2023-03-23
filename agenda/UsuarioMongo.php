@@ -3,7 +3,7 @@ require_once('vendor/autoload.php');
 require_once('ConexionMongo.php');
 require_once('Usuario.php');
 
-class UsuarioMongo extends Usuario implements InterfazOperaciones MongoDB\BSON\Persistable
+class UsuarioMongo extends Usuario  implements MongoDB\BSON\Persistable
 {
 
     private $bd;
@@ -36,41 +36,46 @@ class UsuarioMongo extends Usuario implements InterfazOperaciones MongoDB\BSON\P
     public function listar($usuario)
     {
         $resultado = $this->bd->usuario->find();
-        
-        $usuario = new Usuario($resultado->_id, $resultado->nombre, $resultado->correo, $resultado->password);
+        $resultado->setTypeMap(['root' => self::class]);
+        $usuarios = [];
+    
+        foreach ($resultado as $user) {
+            $usuarios[(String)$user->id_usuario] = $user;
 
-        return $usuario;
+        }
+
+        
+        return $usuarios;
 
     }
 
     public function comprobarUsuario($correo, $password)
     {
 
-        return $this->bd->usuario->findOne(array('$and' => array(array("correo" => $correo), array("password" => $password))));
+        return $this->bd->usuario->findOne(array('$and' => array(array("correo" => $correo), array("password" => $password))),
+        ['typeMap'=>['root' => self::class]]);
     }
     
-    public function bsonUnserialize(array $data)
-    {
+    public function bsonUnserialize(array  $data): void
+   {
 
-        foreach ($data as $key => $value) {
-            switch ($key) {
-                case '_id':
-                    $this->id_usuario = $value;
-                    break;
-                default:
-                    $this->$key = $value;
-                    break;
-            }
-        }
-    }
-
-    public function bsonSerialize()
-    {
-        $array = (array) $this;
-        if (isset($this->id_usuario)) {
-            $array['_id'] = new MongoDB\BSON\ObjectID($this->id_usuario);
-        }
-        unset($array['id_usuario']);
-        return $array;
-    }
+    //$this->nombre = $data["nombre"];
+      foreach ($data as $key => $value) {
+          switch ($key) {
+              case '_id': $this->id_usuario = $value; break;
+              default: $this->$key = $value; break;
+          }
+      }
+   }
+   
+   public function bsonSerialize(): array
+   {
+       $array = (array) $this;
+       if (isset( $this->id_usuario)) {
+        $array['_id'] = new MongoDB\BSON\ObjectID($this->id_usuario);
+       }
+       unset($array['id_usuario']);
+       return $array;
+   }
+    
 }

@@ -5,7 +5,7 @@ require_once('Evento.php');
 require_once('conexionMysql.php');
 
 
-class EventoMysql implements InterfazOperaciones
+class EventoMysql extends Evento implements InterfazOperaciones
 {
 
     private $bd;
@@ -61,7 +61,7 @@ class EventoMysql implements InterfazOperaciones
             $stm->execute();
 
             while (($r = $stm->fetch(PDO::FETCH_OBJ)) != null) {
-                $result[] = new Evento($r->id_evento, $r->id_usuario, $r->nombre, $r->fecha_inicio = new DateTime(), $r->fecha_fin = new DateTime());
+                $result[] = new self($r->id_evento, $r->id_usuario, $r->nombre, $r->fecha_inicio = new DateTime(), $r->fecha_fin = new DateTime());
             }
 
             return $result;

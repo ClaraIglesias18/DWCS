@@ -1,7 +1,7 @@
 <?php
 class Evento
 {
-    public function __construct(protected $id_evento = null, protected $id_usuario = null, protected $nombre = "", protected ?DateTime $fecha_inicio = null, protected ?DateTime $fecha_fin = null)
+    public function __construct(private $id_evento = null, private $id_usuario = null, private $nombre = "", private ?DateTime $fecha_inicio = null, private ?DateTime $fecha_fin = null)
     {
 
         if ($this->fecha_inicio == null) {

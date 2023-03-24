@@ -1,7 +1,13 @@
 <?php
 class Usuario
 {
-    public function __construct(protected $id_usuario = null, protected $nombre = null, protected $correo = null, protected $password = null, protected $rol = 0,  $encriptar = false)
+    public function __construct(
+        public $id_usuario = null, 
+        public $nombre = null, 
+        public $correo = null, 
+        public $password = null, 
+        public $rol = 0,  
+        $encriptar = false)
     {
         if ($encriptar) {
             $this->password = password_hash($password, PASSWORD_DEFAULT);

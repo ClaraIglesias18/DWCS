@@ -20,8 +20,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['correo']) && isset($_P
         $_SESSION['correo'] = $usuarioRecuperado->getCorreo();
         $_SESSION['idUsuario'] = $usuarioRecuperado->getIdUsuario();
 
-        $salida = "Usuario registrado";
-
         if($_SESSION['rol'] == 1) {
             header("location:admin.php");
             exit();

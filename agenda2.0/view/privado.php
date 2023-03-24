@@ -29,13 +29,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['nombre']) && isset($_P
     $evento->create($eventoArr);
 }
 
-foreach ($evento->getAll($idUsuario) as $eventos) {
-    var_dump($eventos);
-    /*$salida .= $eventos->getNombre() . "  " . $eventos->getFechaInicio()->format('Y-m-d H:i:s') 
-        . "   " . $eventos->getFechaFin()->format('Y-m-d H:i:s') . "   " . $eventos->getIdUsuario() 
-        . "    " . $eventos->getIdEvento() . "<a href='eliminar.php?idEvento=" .$eventos->getIdEvento()."'> Eliminar </a>"
-        . "<a href='editar.php?idEvento=" .$eventos->getIdEvento()."'> Editar </a>"."</br>";
-    */
+foreach ($evento::getAll($idUsuario) as $event) {
+
+    $salida .= $event->getNombre() . "  " . $event->getFechaInicio()->format('Y-m-d H:i:s') 
+        . "   " . $event->getFechaFin()->format('Y-m-d H:i:s') . "   " . $event->getIdUsuario() 
+        . "    " . $event->getIdEvento() . "<a href='eliminarEvento.php?idEvento=" .$event->getIdEvento()."'> Eliminar </a>"
+        . "<a href='editarEvento.php?idEvento=" .$event->getIdEvento()."'> Editar </a>"."</br>";
+    
 }
 
 

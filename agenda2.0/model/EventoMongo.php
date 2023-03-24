@@ -4,15 +4,15 @@ require_once('iEvento.php');
 class EventoMongo extends Evento implements iEvento
 {   
     public function create($evento) {
-
+        
     }
-    public function getAll($idUsuario)
+    public  static function getAll($idUsuario)
     {
     }
-    public function getByid()
+    public function getById($idEvento)
     {
     }
-    public function delete($idEvento)
+    public static function delete($idEvento)
     {
     }
     public function modify($idEvento)

@@ -5,14 +5,23 @@ class EventoMysql extends Evento implements iEvento
 {
     private $bd;
 
-    public function __construct()
+    /* public function __construct()
     {
+
+        $this->bd =  ConexionMysql::getConexion();
+    }*/
+
+    public function __construct(
+        public $id_evento = null,
+        public $id_usuario = null,
+        public $nombre = "",
+        public ?DateTime $fecha_inicio = null,
+        public ?DateTime $fecha_fin = null
+    ) {
+        parent::__construct($id_evento, $id_usuario, $nombre, $fecha_inicio, $fecha_fin);
         $this->bd =  ConexionMysql::getConexion();
     }
 
-    //pasar datos de evento desde controller con un array de datos para
-    //tratarlos desde el metodo create
-    //ARREGLAR PASANDO CON HERENCIA DE OBJ
     public function create($evento)
     {
         $nombre = $evento[0];
@@ -24,28 +33,40 @@ class EventoMysql extends Evento implements iEvento
         $stm = $this->bd->prepare($sql);
         $stm->execute([$nombre, $fecha_inicio, $fecha_fin, $id_usuario]);
     }
-    public function getAll($idUsuario)
+    public static function getAll($idUsuario)
     {
         $sql = "SELECT * from evento where id_usuario = ?";
-        $stm = $this->bd->prepare($sql);
+        $stm = ConexionMysql::getConexion()->prepare($sql);
         $stm->execute([$idUsuario]);
-        $result = $stm->fetchAll(PDO::FETCH_CLASS, __CLASS__);
+        //$result = $stm->fetchAll(PDO::FETCH_CLASS, __CLASS__);
+        $result = $stm->fetchAll(PDO::FETCH_OBJ);
         $eventos = [];
-
         foreach ($result as $evento) {
-            $eventos[$evento->id_usuario] = new self($evento->id_evento, $evento->id_usuario, $evento->nombre, $evento->fecha_inicio = new DateTime(), $evento->fecha_fin = new DateTime());
+            $e = new EventoMysql($evento->id_evento, $evento->id_usuario, $evento->nombre, $evento->fecha_inicio = new DateTime(), $evento->fecha_fin = new DateTime());
+            $eventos[$evento->id_evento] = $e;
         }
 
         return $eventos;
     }
-    public function delete($id)
+    public function getById($idEvento)
+    {
+        $sql = "SELECT * from evento where id_evento = ?";
+        $stm = ConexionMysql::getConexion()->prepare($sql);
+        $stm->execute([$idEvento]);
+        $result = $stm->fetchAll(PDO::FETCH_OBJ)[0];
+        $e = new EventoMysql($result->id_evento, $result->id_usuario, $result->nombre, $result->fecha_inicio = new DateTime(), $result->fecha_fin = new DateTime());
+        return $e;
+    }
+    public static function delete($id)
     {
         $sql = "DELETE FROM evento WHERE id_evento = ?";
-        $stm = $this->bd->prepare($sql);
+        $stm = ConexionMysql::getConexion()->prepare($sql);
         $stm->execute([$id]);
     }
-    public function modify($id)
+    public function modify($evento)
     {
-        //pendiente
+        $sql = "UPDATE evento SET nombre = ?, fecha_inicio = ?, fecha_fin = ? WHERE id_evento = ?";
+        $stm = $this->bd->prepare($sql);
+        $stm->execute([$evento->getNombre(), $evento->getFechaInicio()->format('Y-m-d H:i:s'), $evento->getFechaFin()->format('Y-m-d H:i:s'), $evento->getIdEvento()]);
     }
 }

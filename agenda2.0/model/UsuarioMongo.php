@@ -1,6 +1,6 @@
 <?php
 require_once('ConexionMongo.php');
-require_once('../../vendor/autoload.php');
+require_once('../vendor/autoload.php');
 require_once('iUsuario.php');
 require_once('Usuario.php');
 
@@ -34,8 +34,7 @@ class UsuarioMongo extends Usuario implements iUsuario, MongoDB\BSON\Persistable
     }
 
     public function comprobarUsuario($correo, $password)
-    {
-
+    {   
         return ConexionMongo::getConexion()->usuario->findOne(array('$and' => array(array("correo" => $correo), array("password" => $password))),
         ['typeMap'=>['root' => self::class]]);
     }

@@ -19,6 +19,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['correo']) && isset($_P
         $_SESSION['rol'] = $usuarioRecuperado->getRol();
         $_SESSION['correo'] = $usuarioRecuperado->getCorreo();
         $_SESSION['idUsuario'] = $usuarioRecuperado->getIdUsuario();
+        
+        var_dump($usuarioRecuperado);
 
         if($_SESSION['rol'] == 1) {
             header("location:admin.php");

@@ -7,8 +7,10 @@ session_start();
 
 $salida = " ";
 $evento = SelectorPersistente::getEventoPersistente($_SESSION['bdd']);
+$usuario = SelectorPersistente::getUsuarioPersistente($_SESSION['bdd']);
 $idEvento = $_GET['idEvento'];
-
+$idUsuario = $_SESSION['idUsuario'];
+$usuarioObj = $usuario->getById($idUsuario);
 $eventoObj = $evento->getById($idEvento);
 
 if ($_SERVER['REQUEST_METHOD'] == "POST") {
@@ -50,9 +52,10 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     <title>Editar Evento</title>
 </head>
 
-<body>
+<body class="d-flex justify-content-center align-items-center flex-column">
+    <h1 class="text-center bg-warning w-100 h-100">Agenda de <?= $usuarioObj->getNombre() ?></h1>
     <h2>Editar <?= $eventoObj->getNombre() ?></h2>
-    <form action="" method="post">
+    <form action="" method="post" class="d-flex flex-column" style="width: 20%; margin-left:10px;">
         <label for="nombre">Nombre:</label>
         <input type="text" name="nombre" id="nombre" placeholder="<?= $eventoObj->getNombre() ?>">
         <label for="fecha_inicio">Fecha de inicio:</label>
@@ -61,7 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
         <input type="datetime-local" name="fecha_fin" id="fecha_fin">
         <input type="submit" value="Editar">
     </form>
-    <a href="privado.php">Volver</a>
+    <a href="privado.php" class="btn btn-primary" style="background-color: #3b5998; border: 0px; margin-top:10px">Volver</a>
 </body>
 
 </html>

@@ -4,7 +4,7 @@ require_once('../model/SelectorPersistente.php');
 
 session_start();
 
-if(!isset($_SESSION['idUsuario'])) {
+if (!isset($_SESSION['idUsuario'])) {
     header("location:login.php");
     exit();
 }
@@ -31,18 +31,17 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
             $password = $_POST['password'];
             $usuarioObj->setPassword($password);
         }
-        
+
         $usuario->modify($usuarioObj);
     }
 
-    if($usuarioObj->getRol() == 1) {
+    if ($usuarioObj->getRol() == 1) {
         header("location:admin.php");
         exit();
     } else {
         header("location:privado.php");
         exit();
     }
-    
 }
 
 ?>
@@ -59,18 +58,22 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     <title>Editar Usuario</title>
 </head>
 
-<body>
+<body class="d-flex justify-content-center align-items-center flex-column">
+    <h1 class="text-center bg-warning w-100 h-100">Pagina de admin</h1>
+    <div>
+        <a href="cerrarSesion.php" class="btn btn-primary" style="background-color: #dd4b39; border: 0px;">Cerrar Sesion</a>
+    </div>
     <h2>Editar <?= $usuarioObj->getNombre() ?></h2>
-    <form action="" method="post">
+    <form action="" method="post" class="d-flex flex-column" style="width: 20%; margin-left:10px;">
         <label for="nombre">Nombre:</label>
         <input type="text" name="nombre" id="nombre" placeholder="<?= $usuarioObj->getNombre() ?>">
         <label for="fecha_inicio">Correo:</label>
-        <input type="text" name="correo" id="correo" placeholder="<?= $usuarioObj->getCorreo()?>">
+        <input type="text" name="correo" id="correo" placeholder="<?= $usuarioObj->getCorreo() ?>">
         <label for="password">Password</label>
         <input type="password" name="password" id="password">
         <input type="submit" value="Editar">
     </form>
-    <a href="privado.php">Volver</a>
+    <a href="privado.php" class="btn btn-primary" style="background-color: #3b5998; border: 0px; margin-top:10px">Volver</a>
 </body>
 
 </html>

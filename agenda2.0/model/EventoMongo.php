@@ -3,7 +3,7 @@ require_once('ConexionMongo.php');
 require_once('Evento.php');
 require_once('../vendor/autoload.php');
 require_once('iEvento.php');
-class EventoMongo extends Evento implements iEvento, MongoDB\BSON\Persistable
+class EventoMongo extends Evento implements iEvento //, MongoDB\BSON\Persistable
 {
     public function create($evento)
     {
@@ -66,7 +66,7 @@ class EventoMongo extends Evento implements iEvento, MongoDB\BSON\Persistable
             ]]
         );
     }
-
+/*
     public function bsonUnserialize(array  $data): void
     {
 
@@ -91,5 +91,5 @@ class EventoMongo extends Evento implements iEvento, MongoDB\BSON\Persistable
         }
         unset($array['id_evento']);
         return $array;
-    }
+    }*/
 }

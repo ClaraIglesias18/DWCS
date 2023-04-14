@@ -1,16 +1,16 @@
 <?php
 session_start();
-    if ($_SERVER["REQUEST_METHOD"]== "POST" && isset($_POST['bdd'])) {
-        $bdd = $_POST['bdd'];
-        $_SESSION['bdd'] = $bdd;
-        header("location:login.php");
-        exit();
-
-    }
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['bdd'])) {
+    $bdd = $_POST['bdd'];
+    $_SESSION['bdd'] = $bdd;
+    header("location:login.php");
+    exit();
+}
 ?>
 
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -19,14 +19,19 @@ session_start();
     <title>Selector de BDD</title>
 </head>
 
-<body>
-    <h1>Seleccion de BDD</h1>
-    <form action="" method="post">
-        <input type="radio" name="bdd" value="0">
-        <label for="mysql">MySQL</label>
-        <input type="radio" name="bdd" value="1">
-        <label for="mongodb">MongoDB</label>
-        <input type="submit" value="Aceptar">
+<body class="d-flex justify-content-center align-items-center flex-column">
+    <h1 class="text-center bg-warning w-100" >Agenda de eventos</h1>
+    <h2>Seleccion de BDD</h2>
+    <form action="" method="post" class="d-flex justify-content-center align-items-center flex-column">
+        <div>
+            <input type="radio" name="bdd" value="0">
+            <label for="mysql" class="">MySQL</label>
+            <input type="radio" name="bdd" value="1">
+            <label for="mongodb" class="">MongoDB</label>
+        </div>
+        <div>
+            <input type="submit" value="Aceptar" class="bg-primary text-white btn-lg">
+        </div>
     </form>
 </body>
 

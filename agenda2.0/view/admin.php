@@ -25,10 +25,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['nombre']) && isset($_P
 
 
 foreach ($usuario->getAll($usuario) as $usuarios) {
-    $salida .= $usuarios->getNombre() . "  " . $usuarios->getCorreo()
-        . "   " . $usuarios->getPassword() . "   "
-        . "<a href='eliminarUsuario.php?idUsuario=" . $usuarios->getIdUsuario() . "'> Eliminar </a>"
-        . "<a href='editarUsuario.php?idUsuario=" . $usuarios->getIdusuario() . "'> Editar </a>" . "</br>";
+    $salida .= "<tr>
+                <td>" . $usuarios->getNombre() . "</td>
+                <td>" . $usuarios->getCorreo() . "</td>
+                <td>" . $usuarios->getPassword() . "
+                <a href='eliminarUsuario.php?idUsuario=" . $usuarios->getIdUsuario() . "' class='btn btn-primary' style='background-color: #dd4b39; border: 0px;'> Eliminar </a>
+                <a href='editarUsuario.php?idUsuario=" . $usuarios->getIdusuario() . "' class='btn btn-primary' style='background-color: #3b5998; border: 0px;'> Editar </a></td>
+                </tr>";
 }
 
 ?>
@@ -43,11 +46,13 @@ foreach ($usuario->getAll($usuario) as $usuarios) {
 .0/css/bootstrap.min.css">
     <title>Pagina de admin</title>
 </head>
-<body>
-    <h1>Página de admin</h1>
-    <a href="cerrarSesion.php">Cerrar Sesion</a>
+<body class="d-flex justify-content-center align-items-center flex-column">
+<h1 class="text-center bg-warning w-100 h-100">Pagina de admin</h1>
+    <div>
+        <a href="cerrarSesion.php" class="btn btn-primary" style="background-color: #dd4b39; border: 0px;">Cerrar Sesion</a>
+    </div>
     <h2>Creacion de usuarios</h2>
-    <form action="" method="post">
+    <form action="" method="post" class="d-flex flex-column" style="width: 20%; margin-left:10px;">
         <label for="nombre">Nombre:</label>
         <input type="text" name="nombre" id="nombre" required>
         <label for="correo">Correo:</label>
@@ -56,8 +61,19 @@ foreach ($usuario->getAll($usuario) as $usuarios) {
         <input type="password" name="password" id="password" required>
         <input type="submit" value="Crear">
     </form>
-    </br>
-    <h2>Lista de usuarios</h2>
-    <?= $salida ?>
+    <div class="d-flex justify-content-center align-items-center flex-column">
+        <h2 style="margin-left:10px;">Lista de usuarios</h2>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Nombre</th>
+                    <th scope="col">Correo</th>
+                    <th scope="col">Contraseña</th>
+                </tr>
+                <?= $salida ?>
+            </thead>
+        </table>
+            
+    </div>
 </body>
 </html>

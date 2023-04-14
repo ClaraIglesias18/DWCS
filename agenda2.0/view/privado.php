@@ -37,11 +37,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['nombre']) && isset($_P
 
 foreach ($evento::getAll($idUsuario) as $event) {
 
-    $salida .= $event->getNombre() . "  " . $event->getFechaInicio()->format('Y-m-d H:i:s') 
-        . "   " . $event->getFechaFin()->format('Y-m-d H:i:s')
-        . "<a href='eliminarEvento.php?idEvento=" .$event->getIdEvento()."'> Eliminar </a>"
-        . "<a href='editarEvento.php?idEvento=" .$event->getIdEvento()."'> Editar </a>"."</br>";
-    
+    $salida .= "<tr>
+                <td>" . $event->getNombre() . "</td> 
+                <td>" . $event->getFechaInicio()->format('Y-m-d H:i:s') . "</td>
+                <td>" . $event->getFechaFin()->format('Y-m-d H:i:s') . " 
+                <a href='eliminarEvento.php?idEvento=" . $event->getIdEvento() . "' class='btn btn-primary' style='background-color: #dd4b39; border: 0px;'> Eliminar </a>
+                <a href='editarEvento.php?idEvento= " . $event->getIdEvento() . "' class='btn btn-primary' style='background-color: #3b5998; border: 0px;'> Editar </a></td>
+                </tr>";
 }
 
 
@@ -58,13 +60,14 @@ foreach ($evento::getAll($idUsuario) as $event) {
     <title>Agenda</title>
 </head>
 
-<body>
-    <h1>Agenda de <?= $usuarioObj->getNombre()?></h1>
-    <a href="cerrarSesion.php">Cerrar Sesion</a>
-    </br>
-    <a href="editarUsuario.php?idUsuario=<?=$idUsuario?>">Editar Cuenta</a>
-    <h2>Crear un evento</h2>
-    <form action="" method="post">
+<body class="d-flex justify-content-center align-items-center flex-column">
+    <h1 class="text-center bg-warning w-100 h-100">Agenda de <?= $usuarioObj->getNombre() ?></h1>
+    <div>
+        <a href="cerrarSesion.php" class="btn btn-primary" style="background-color: #dd4b39; border: 0px;">Cerrar Sesion</a>
+        <a href="editarUsuario.php?idUsuario=<?= $idUsuario ?>" class="btn btn-primary" style="background-color: #3b5998; border: 0px;">Editar Cuenta</a>
+    </div>
+    <h2 style="margin-left:10px;">Crear un evento</h2>
+    <form action="" method="post" class="d-flex flex-column" style="width: 20%; margin-left:10px;">
         <label for="nombre">Nombre:</label>
         <input type="text" name="nombre" id="nombre" required>
         <label for="fecha_inicio">Fecha de inicio:</label>
@@ -73,10 +76,19 @@ foreach ($evento::getAll($idUsuario) as $event) {
         <input type="datetime-local" name="fecha_fin" id="fecha_fin">
         <input type="submit" value="Agregar">
     </form>
-    </br>
-    <div>
-        <h2>Lista de eventos</h2>
-        <?= $salida ?>
+    <div class="d-flex justify-content-center align-items-center flex-column">
+        <h2 style="margin-left:10px;">Lista de eventos</h2>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Nombre</th>
+                    <th scope="col">Fecha de Inicio</th>
+                    <th scope="col">Fecha de Fin</th>
+                </tr>
+            </thead>
+            <?= $salida ?>
+        </table>
+
     </div>
 </body>
 

@@ -17,10 +17,13 @@ $idUsuario = $_GET['idUsuario'];
 $evento = SelectorPersistente::getEventoPersistente($_SESSION['bdd']);
 $usuario = SelectorPersistente::getUsuarioPersistente($_SESSION['bdd']);
 
-foreach($evento->getAll($idUsuario) as $evento) {
+//falta la eliminacion de eventos del usuario antes de eliminarlo
+//se necesita primero biscar si hay eventos con el id usuario y despues si es afirmativos se borran para no pasar null
+/*foreach($evento->getAll($idUsuario) as $evento) {
     $evento->delete($evento->getIdEvento());
-}
+}*/
 
 $usuario->delete($idUsuario);
+
 header("location:admin.php");
 exit();

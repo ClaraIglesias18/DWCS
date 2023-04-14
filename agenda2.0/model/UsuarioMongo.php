@@ -8,37 +8,83 @@ class UsuarioMongo extends Usuario implements iUsuario, MongoDB\BSON\Persistable
 {
     public function create($usuario)
     {
-        //hay que formatear los datos que viene en arr a json
-        ConexionMongo::getConexion()->usuario->insertOne($usuario);
+        $nombre = $usuario[0];
+        $correo = $usuario[1];
+        $password = $usuario[2];
+        $rol = 0;
+
+        ConexionMongo::getConexion()->usuario->insertOne([
+            '_id' => new MongoDB\BSON\ObjectID(),
+            'nombre' => $nombre,
+            'correo' => $correo,
+            'password' => $password,
+            'rol' => $rol
+        ]);
     }
     public function getAll()
     {
-        $resultado = ConexionMongo::getConexion()->usuario->find();
-        $resultado->setTypeMap(['root' => self::class]);
+        $resultado = ConexionMongo::getConexion()->usuario->find(['rol' => 0]);
         $usuarios = [];
 
-        foreach ($resultado as $user) {
-            $usuarios[(string)$user->id_usuario] = $user;
+        foreach ($resultado as $usuario) {
+            array_push($usuarios, new self(
+                $usuario->_id,
+                $usuario->nombre,
+                $usuario->correo,
+                $usuario->password,
+                $usuario->rol
+            ));
         }
 
         return $usuarios;
     }
     public function getByid($id)
     {
+        $resultado = ConexionMongo::getConexion()->usuario->findOne(['_id' => new MongoDB\BSON\ObjectID($id)]);
+
+        $usuario = new self(
+            $resultado->_id,
+            $resultado->nombre,
+            $resultado->correo,
+            $resultado->password,
+            $resultado->rol
+        );
+
+        return $usuario;
     }
     public function delete($id)
     {
+        ConexionMongo::getConexion()->usuario->deleteOne(['_id' => new MongoDB\BSON\ObjectID($id)]);
     }
-    public function modify($id)
+    public function modify($usuario)
     {
+        ConexionMongo::getConexion()->usuario->updateMany(
+            ['_id' => new MongoDB\BSON\ObjectID($usuario->getIdUsuario())],
+            ['$set' => [
+                'nombre' => $usuario->getNombre(),
+                'correo' => $usuario->getCorreo(),
+                'password' => $usuario->getPassword()
+            ]],
+        );
     }
 
     public function comprobarUsuario($correo, $password)
     {
-        return ConexionMongo::getConexion()->usuario->findOne(
-            array('$and' => array(array("correo" => $correo), array("password" => $password))),
-            ['typeMap' => ['root' => self::class]]
-        );
+        $resultado = ConexionMongo::getConexion()->usuario->findOne(['$and' => [['correo' => $correo], ['password' => $password]]]);
+
+        if ($resultado != null) {
+            $usuario = new self(
+                $resultado->_id,
+                $resultado->nombre,
+                $resultado->correo,
+                $resultado->password,
+                $resultado->rol
+            );
+
+            return $usuario;
+        } else {
+            return false;
+        }
     }
 
     public function bsonUnserialize(array  $data): void

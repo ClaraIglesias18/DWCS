@@ -14,13 +14,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['correo']) && isset($_P
     $correo = $_POST['correo'];
     $password = $_POST['password'];
 
-    if($usuario->comprobarUsuario($correo, $password) != null) {
+    if($usuario->comprobarUsuario($correo, $password)) {
         $usuarioRecuperado = $usuario->comprobarUsuario($correo, $password);
         $_SESSION['rol'] = $usuarioRecuperado->getRol();
         $_SESSION['correo'] = $usuarioRecuperado->getCorreo();
         $_SESSION['idUsuario'] = $usuarioRecuperado->getIdUsuario();
-        
-        var_dump($usuarioRecuperado);
 
         if($_SESSION['rol'] == 1) {
             header("location:admin.php");
@@ -58,6 +56,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['correo']) && isset($_P
         <input type="submit" value="Entrar">
     </form>
     <a href="registro.php">Registrarse</a>
+    </br>
+    <a href="cerrarSesion.php">Cerrar Sesion</a>
 </body>
 
 </html>

@@ -3,24 +3,6 @@ require_once('Evento.php');
 require_once('iEvento.php');
 class EventoMysql extends Evento implements iEvento
 {
-    private $bd;
-
-    /* public function __construct()
-    {
-
-        $this->bd =  ConexionMysql::getConexion();
-    }*/
-
-    public function __construct(
-        public $id_evento = null,
-        public $id_usuario = null,
-        public $nombre = "",
-        public ?DateTime $fecha_inicio = null,
-        public ?DateTime $fecha_fin = null
-    ) {
-        parent::__construct($id_evento, $id_usuario, $nombre, $fecha_inicio, $fecha_fin);
-        $this->bd =  ConexionMysql::getConexion();
-    }
 
     public function create($evento)
     {
@@ -30,7 +12,7 @@ class EventoMysql extends Evento implements iEvento
         $id_usuario = $evento[3];
 
         $sql = "INSERT INTO evento (nombre, fecha_inicio, fecha_fin, id_usuario) VALUES (?, ?, ?, ?)";
-        $stm = $this->bd->prepare($sql);
+        $stm = ConexionMysql::getConexion()->prepare($sql);
         $stm->execute([$nombre, $fecha_inicio, $fecha_fin, $id_usuario]);
     }
     public static function getAll($idUsuario)
@@ -42,7 +24,13 @@ class EventoMysql extends Evento implements iEvento
         $result = $stm->fetchAll(PDO::FETCH_OBJ);
         $eventos = [];
         foreach ($result as $evento) {
-            $e = new EventoMysql($evento->id_evento, $evento->id_usuario, $evento->nombre, $evento->fecha_inicio = new DateTime(), $evento->fecha_fin = new DateTime());
+            $e = new EventoMysql(
+                $evento->id_evento,
+                $evento->id_usuario,
+                $evento->nombre,
+                $evento->fecha_inicio = new DateTime($evento->fecha_inicio),
+                $evento->fecha_fin = new DateTime($evento->fecha_fin)
+            );
             $eventos[$evento->id_evento] = $e;
         }
 
@@ -54,10 +42,16 @@ class EventoMysql extends Evento implements iEvento
         $stm = ConexionMysql::getConexion()->prepare($sql);
         $stm->execute([$idEvento]);
         $result = $stm->fetchAll(PDO::FETCH_OBJ)[0];
-        $e = new EventoMysql($result->id_evento, $result->id_usuario, $result->nombre, $result->fecha_inicio = new DateTime(), $result->fecha_fin = new DateTime());
+        $e = new EventoMysql(
+            $result->id_evento,
+            $result->id_usuario,
+            $result->nombre,
+            $result->fecha_inicio = new DateTime($result->fecha_inicio),
+            $result->fecha_fin = new DateTime($result->fecha_fin)
+        );
         return $e;
     }
-    public static function delete($id)
+    public function delete($id)
     {
         $sql = "DELETE FROM evento WHERE id_evento = ?";
         $stm = ConexionMysql::getConexion()->prepare($sql);
@@ -66,7 +60,12 @@ class EventoMysql extends Evento implements iEvento
     public function modify($evento)
     {
         $sql = "UPDATE evento SET nombre = ?, fecha_inicio = ?, fecha_fin = ? WHERE id_evento = ?";
-        $stm = $this->bd->prepare($sql);
-        $stm->execute([$evento->getNombre(), $evento->getFechaInicio()->format('Y-m-d H:i:s'), $evento->getFechaFin()->format('Y-m-d H:i:s'), $evento->getIdEvento()]);
+        $stm = ConexionMysql::getConexion()->prepare($sql);
+        $stm->execute([
+            $evento->getNombre(),
+            $evento->getFechaInicio()->format('Y-m-d H:i:s'),
+            $evento->getFechaFin()->format('Y-m-d H:i:s'),
+            $evento->getIdEvento()
+        ]);
     }
 }

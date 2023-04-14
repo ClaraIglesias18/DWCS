@@ -18,9 +18,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['nombre']) && isset($_P
     $eventoArr = [];
     $nombre = $_POST['nombre'];
     $fecha_inicio = new DateTime($_POST['fecha_inicio']);
-    $fecha_fin = null;
+    $fecha_fin = new DateTime($_POST['fecha_inicio']);
 
-    if (isset($_POST['fecha_fin'])) {
+    if (!isset($_POST['fecha_fin'])) {
+        $fecha_fin->add(new DateInterval('PT01H'));
+    } else {
         $fecha_fin = new DateTime($_POST['fecha_fin']);
     }
 
@@ -32,8 +34,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['nombre']) && isset($_P
 foreach ($evento::getAll($idUsuario) as $event) {
 
     $salida .= $event->getNombre() . "  " . $event->getFechaInicio()->format('Y-m-d H:i:s') 
-        . "   " . $event->getFechaFin()->format('Y-m-d H:i:s') . "   " . $event->getIdUsuario() 
-        . "    " . $event->getIdEvento() . "<a href='eliminarEvento.php?idEvento=" .$event->getIdEvento()."'> Eliminar </a>"
+        . "   " . $event->getFechaFin()->format('Y-m-d H:i:s')
+        . "<a href='eliminarEvento.php?idEvento=" .$event->getIdEvento()."'> Eliminar </a>"
         . "<a href='editarEvento.php?idEvento=" .$event->getIdEvento()."'> Editar </a>"."</br>";
     
 }

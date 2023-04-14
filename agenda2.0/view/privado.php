@@ -3,14 +3,18 @@ require_once('../model/SelectorPersistente.php');
 
 session_start();
 
-if (!isset($_SESSION['correo'])) {
+if (!isset($_SESSION['idUsuario'])) {
     header("location:login.php");
     exit();
 }
 
 $correo = $_SESSION['correo'];
 $idUsuario = $_SESSION['idUsuario'];
+
 $evento = SelectorPersistente::getEventoPersistente($_SESSION['bdd']);
+$usuario = SelectorPersistente::getUsuarioPersistente($_SESSION['bdd']);
+
+$usuarioObj = $usuario->getById($idUsuario);
 
 $salida = "";
 
@@ -55,8 +59,10 @@ foreach ($evento::getAll($idUsuario) as $event) {
 </head>
 
 <body>
-    <h1>Agenda</h1>
+    <h1>Agenda de <?= $usuarioObj->getNombre()?></h1>
     <a href="cerrarSesion.php">Cerrar Sesion</a>
+    </br>
+    <a href="editarUsuario.php?idUsuario=<?=$idUsuario?>">Editar Cuenta</a>
     <h2>Crear un evento</h2>
     <form action="" method="post">
         <label for="nombre">Nombre:</label>

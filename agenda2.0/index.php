@@ -1,6 +1,6 @@
 <?php
 session_start();
-if (!isset($_SESSION['correo'])) {
+if (!isset($_SESSION['idUsuario'])) {
     header("location:view/login.php");
     exit();
 } else {

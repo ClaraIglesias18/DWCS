@@ -5,23 +5,19 @@ require_once('../model/SelectorPersistente.php');
 
 session_start();
 
-if(!isset($_SESSION['correo'])) {
+if(!isset($_SESSION['idUsuario'])) {
     header("location:login.php");
     exit();
 }
-
-$salida = " ";
     
 $idUsuario = $_GET['idUsuario'];
 
 $evento = SelectorPersistente::getEventoPersistente($_SESSION['bdd']);
 $usuario = SelectorPersistente::getUsuarioPersistente($_SESSION['bdd']);
 
-//falta la eliminacion de eventos del usuario antes de eliminarlo
-//se necesita primero biscar si hay eventos con el id usuario y despues si es afirmativos se borran para no pasar null
-/*foreach($evento->getAll($idUsuario) as $evento) {
-    $evento->delete($evento->getIdEvento());
-}*/
+foreach($evento::getAll($idUsuario) as $event) {
+    $event->delete($event->getIdEvento());
+}
 
 $usuario->delete($idUsuario);
 

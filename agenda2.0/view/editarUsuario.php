@@ -4,7 +4,11 @@ require_once('../model/SelectorPersistente.php');
 
 session_start();
 
-$salida = " ";
+if(!isset($_SESSION['idUsuario'])) {
+    header("location:login.php");
+    exit();
+}
+
 $usuario = SelectorPersistente::getUsuarioPersistente($_SESSION['bdd']);
 $idUsuario = $_GET['idUsuario'];
 
@@ -31,8 +35,14 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
         $usuario->modify($usuarioObj);
     }
 
-    header("location:admin.php");
-    exit();
+    if($usuarioObj->getRol() == 1) {
+        header("location:admin.php");
+        exit();
+    } else {
+        header("location:privado.php");
+        exit();
+    }
+    
 }
 
 ?>

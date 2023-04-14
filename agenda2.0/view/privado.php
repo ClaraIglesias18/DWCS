@@ -42,7 +42,7 @@ foreach ($evento::getAll($idUsuario) as $event) {
                 <td>" . $event->getFechaInicio()->format('Y-m-d H:i:s') . "</td>
                 <td>" . $event->getFechaFin()->format('Y-m-d H:i:s') . " 
                 <a href='eliminarEvento.php?idEvento=" . $event->getIdEvento() . "' class='btn btn-primary' style='background-color: #dd4b39; border: 0px;'> Eliminar </a>
-                <a href='editarEvento.php?idEvento= " . $event->getIdEvento() . "' class='btn btn-primary' style='background-color: #3b5998; border: 0px;'> Editar </a></td>
+                <a href='editarEvento.php?idEvento=" . $event->getIdEvento() . "' class='btn btn-primary' style='background-color: #3b5998; border: 0px;'> Editar </a></td>
                 </tr>";
 }
 

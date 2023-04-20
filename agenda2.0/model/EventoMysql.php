@@ -3,7 +3,6 @@ require_once('Evento.php');
 require_once('iEvento.php');
 class EventoMysql extends Evento implements iEvento
 {
-
     public function create($evento)
     {
         $nombre = $evento[0];

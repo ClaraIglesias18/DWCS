@@ -24,7 +24,7 @@
 
         function jugarNumero($numero) {
             if($numero == $this->valorNumero) {
-                $this->mensaje
+                $this->mensaje;
             }
         }
 

@@ -52,4 +52,12 @@ class Usuario {
     {
         return $this->correo;
     }
+
+    /**
+     * Get the value of password
+     */ 
+    public function getPassword()
+    {
+        return $this->password;
+    }
 }

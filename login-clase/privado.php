@@ -8,9 +8,9 @@ if (!isset($_SESSION["usuario"])) {
     exit();
 }
 
-echo $hash = password_hash("12345",PASSWORD_DEFAULT);
+echo $hash = password_hash($_SESSION["usuario"]["password"],PASSWORD_DEFAULT);
 
-if (password_verify("12345",$hash)) {
+if (password_verify($_SESSION["usuario"]["password"],$hash)) {
     echo "Acceso verificado";
 } else {
     echo "acceso denegado";

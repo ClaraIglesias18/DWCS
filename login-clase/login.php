@@ -5,9 +5,9 @@ $mensaje ="";
 if ($_SERVER["REQUEST_METHOD"]== "POST" && isset($_POST["correo"])&& isset($_POST["password"]) ) {
     $correo = $_POST["correo"];
     $passwd = $_POST["password"];
-    $dsn = "mysql:dbname=docker_demo;host=docker-mysql";
+    $dsn = "mysql:dbname=pruebas;host=127.0.0.1";
     $usuario ="root";
-    $password = "root123";
+    $password = "abc123.";
     $bd = new PDO($dsn, $usuario, $password);
     $sql = "select * from usuario where correo='$correo' and password='$passwd' limit 1";
     //echo $sql;
@@ -25,6 +25,7 @@ if ($_SERVER["REQUEST_METHOD"]== "POST" && isset($_POST["correo"])&& isset($_POS
         } else {
             $_SESSION["usuario"]["idUsuario"] = $usuario->getIdUsuario();
             $_SESSION["usuario"]["nombre"] = $usuario->getNombre();
+            $_SESSION["usuario"]["password"] = $usuario->getPassword();
             header("location:index.php");
             exit();
         }

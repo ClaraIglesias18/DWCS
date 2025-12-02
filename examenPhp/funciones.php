@@ -1,5 +1,5 @@
 <?php
-/**function reset() {
+function resetear() {
     session_start();
     session_unset();      // Borra todas las variables de sesión
     session_destroy();    // Destruye la sesión
@@ -7,7 +7,7 @@
     setcookie("nombre", "", time() - 3600);    // Borra cookie del nombre
     header("Location: tienda.php");
     exit();
-}**/
+}
 
 function invertirNombre($nombre) {
     return strrev($nombre);
@@ -41,9 +41,7 @@ function validarProducto($producto) {
 function validarCantidad($cantidad) {
     if (empty($cantidad)) {
         return "La cantidad es obligatoria.";
-    }
-
-    if($cantidad % 3 != 0){
+    } if ($cantidad % 3 != 0) {
         return "La cantidad debe ser múltiplo de 3.";
     }
 

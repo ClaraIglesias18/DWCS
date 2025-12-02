@@ -8,28 +8,48 @@ $_SESSION["precio1"] = 10;
 $_SESSION["precio2"] = 15.50;
 $_SESSION["precio3"] = 20;
 
+// Recoger errores
+$errores = $_SESSION['errores'] ?? [];
+$old = $_SESSION['old'] ?? [];
+
+// Limpiar errores para que no se muestren siempre
+unset($_SESSION['errores']);
+
 ?>
 
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <title>Tienda de libros - Ejemplo Carrito</title>
 </head>
+
 <body>
     <h1>Tienda de libros</h1>
-    
+
+    <?php if (!empty($errores)): ?>
+        <div style="color:red;">
+            <ul>
+                <?php foreach ($errores as $error): ?>
+                    <li><?= $error ?></li>
+                <?php endforeach; ?>
+            </ul>
+        </div>
+    <?php endif; ?>
+
+
     <form action="carrito.php" method="POST">
         <!-- SOLO aparece si NO hay cookie -->
         <?php if (!isset($_COOKIE["nombre"])): ?>
-        <p>
-            <label for="nombre">Nombre del cliente:</label>
-            <input type="text" name="nombre">
-        </p>
+            <p>
+                <label for="nombre">Nombre del cliente:</label>
+                <input type="text" name="nombre">
+            </p>
         <?php else: ?>
-        <p>Hola, <?php echo htmlspecialchars($_COOKIE["nombre"]); ?></p>
-        <!-- Enviar nombre vacío porque carrito.php lo requiere -->
-        <input type="hidden" name="nombre" value="">
+            <p>Hola, <?php echo htmlspecialchars($_COOKIE["nombre"]); ?></p>
+            <!-- Enviar nombre vacío porque carrito.php lo requiere -->
+            <input type="hidden" name="nombre" value="">
         <?php endif; ?>
 
         <p>
@@ -56,4 +76,5 @@ $_SESSION["precio3"] = 20;
         <a href="carrito.php">Ver carrito actual</a>
     </p>
 </body>
+
 </html>

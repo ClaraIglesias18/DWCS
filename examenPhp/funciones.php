@@ -1,49 +1,63 @@
 <?php
-function resetear() {
-    session_start();
-    session_unset();      // Borra todas las variables de sesión
-    session_destroy();    // Destruye la sesión
-    setcookie("PHPSESSID", "", time() - 3600); // Borra cookie de sesión
-    setcookie("nombre", "", time() - 3600);    // Borra cookie del nombre
-    header("Location: tienda.php");
-    exit();
+/**
+ * Invertir el nombre del cliente.
+ * @param string $nombre
+ * @return string Nombre invertido
+ */
+function invertir_nombre($nombre) {
+    // La función strrev() de PHP invierte una cadena
+    return strrev($nombre); // [cite: 49]
 }
 
-function invertirNombre($nombre) {
-    return strrev($nombre);
+/**
+ * Valida que un campo no esté vacío.
+ * @param mixed $valor
+ * @return bool True si es válido (no vacío), False en caso contrario
+ */
+function validar_no_vacio($valor) {
+    return !empty($valor); // [cite: 48]
 }
 
-function validarNombre($nombre) {
-    if (empty($nombre)) {
-        return "El nombre es obligatorio.";
-    }
-    
-    return "";
+/**
+ * Valida que la cantidad sea un múltiplo de 3.
+ * @param int $cantidad
+ * @return bool True si es múltiplo de 3, False en caso contrario
+ */
+function validar_multiplo_tres($cantidad) {
+    // La cantidad debe ser un número entero y el resto de la división por 3 debe ser 0
+    return is_numeric($cantidad) && $cantidad > 0 && ($cantidad % 3) === 0; // [cite: 30, 48]
 }
 
-function totalGeneral($carrito, $precios) {
+/**
+ * Calcula el precio total del carrito de forma dinámica.
+ * @param array $cantidades Array asociativo con las cantidades de productos, e.g., ['Libro 1' => 6, ...]
+ * @param array $precios Array asociativo con los precios, e.g., ['Libro 1' => 10.00, ...]
+ * @return float El precio total
+ */
+function calcular_precio_total($cantidades, $precios) {
     $total = 0;
-    foreach ($carrito as $item) {
-        $total += $precios[$item['producto']] * $item['cantidad'];
+    // Iteramos sobre las cantidades. La clave es el nombre del producto (e.g., 'Libro 1')
+    foreach ($cantidades as $producto_clave => $cantidad) {
+        // Obtenemos el precio unitario del array de precios
+        $precio_unitario = $precios[$producto_clave] ?? 0;
+        // Sumamos el subtotal (cantidad * precio unitario) al total
+        $total += $cantidad * $precio_unitario; // [cite: 50, 51]
     }
     return $total;
 }
 
-//VALIDACIONES
-function validarProducto($producto) {
-    if (empty($producto)) {
-        return "El producto es obligatorio.";
+/**
+ * Resetea la sesión y la cookie de nombre.
+ */
+function resetear_sesion_y_cookie() {
+    // Destruye todas las variables de sesión
+    session_unset();
+    session_destroy();
+
+    // Elimina la cookie del nombre. Se establece con una fecha de caducidad en el pasado.
+    if (isset($_COOKIE['nombre_cliente'])) {
+        // Tiempo actual - 3600 segundos (una hora en el pasado)
+        setcookie('nombre_cliente', '', time() - 3600, "/");
     }
-
-    return "";
-}
-
-function validarCantidad($cantidad) {
-    if (empty($cantidad)) {
-        return "La cantidad es obligatoria.";
-    } if ($cantidad % 3 != 0) {
-        return "La cantidad debe ser múltiplo de 3.";
-    }
-
-    return "";
+     // [cite: 46, 53]
 }

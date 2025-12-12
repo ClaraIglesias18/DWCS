@@ -3,71 +3,66 @@ session_start();
 require_once 'funciones.php';
 
 // Definición de las claves de producto largas para la tabla (si los datos de sesión son las claves cortas)
+/** 
 $nombres_completos = [
     'Libro 1' => 'Libro 1 PHP básico',
     'Libro 2' => 'Libro 2 HTML y CSS',
     'Libro 3' => 'Libro 3 JavaScript para principiantes',
 ];
+*/
 
 // Comprobar si la acción es añadir producto (POST) o solo ver carrito (GET/enlace)
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['accion'] ?? '') === 'anadir') {
-    // --- Lógica de envío de formulario (Añadir al carrito) [cite: 25] ---
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
-    $nombre = trim($_POST['nombre'] ?? '');
+    $nombre = $_POST['nombre'] ?? '';
     $producto = $_POST['producto'] ?? '';
     $cantidad = (int) ($_POST['cantidad'] ?? 0);
     $errores = [];
 
-    // 1. Validación de Nombre
     $existe_cookie = isset($_COOKIE['nombre_cliente']);
-    if (!$existe_cookie && !validar_no_vacio($nombre)) {
-        // Nombre no puede ser vacío si NO existe la cookie [cite: 27]
+    if (!$existe_cookie && validar_vacio($nombre)) {
+        // Nombre no puede ser vacío si NO existe la cookie
         $errores[] = "El nombre del cliente no puede estar vacío la primera vez.";
-    } else {
-        // Si no existe la cookie, se guarda. Caduca en 90 segundos (1 minuto y medio) [cite: 2, 28]
-        setcookie('nombre_cliente', $nombre, time() + 90, "/");
-        // Asegurar que el nombre del cliente esté disponible para el mensaje de bienvenida
-        $_COOKIE['nombre_cliente'] = $nombre;
+    } else if(!$existe_cookie) {
+        // Si no existe la cookie, se guarda. Caduca en 90 segundos (1 minuto y medio)
+        setcookie('nombre_cliente', $nombre, time() + 90, "/"); 
     }
 
-    // 2. Validación de Producto [cite: 29]
-    if (!validar_no_vacio($producto)) {
+    if (validar_vacio($producto)) {
         $errores[] = "Debe seleccionar un producto.";
     }
 
-    // 3. Validación de Cantidad [cite: 30]
     if (!validar_multiplo_tres($cantidad)) {
         $errores[] = "La cantidad debe ser un múltiplo de 3 (3, 6, 9, etc.).";
     }
 
-    // Si hay errores, volver a tienda.php y mostrar los mensajes [cite: 31]
+    // Si hay errores, volver a tienda.php y mostrar los mensajes 
     if (!empty($errores)) {
         $_SESSION['errores'] = $errores;
         header('Location: tienda.php');
         exit;
     }
 
-    // Si todo es válido: Almacenar/Sumar la cantidad en la variable de sesión [cite: 32]
+    // Si todo es válido: Almacenar/Sumar la cantidad en la variable de sesión 
     if (isset($_SESSION['carrito'][$producto])) {
         $_SESSION['carrito'][$producto] += $cantidad;
     } else {
         $_SESSION['carrito'][$producto] = $cantidad;
     }
     
-    // Si se añade un producto con éxito, se muestra el carrito (el resto del script lo hace)
 } 
 
-// Obtener datos del carrito para la visualización [cite: 37]
+// Obtener datos del carrito para la visualización
 $carrito = $_SESSION['carrito'] ?? [];
 $precios = $_SESSION['precios'] ?? [];
 
 // Si no hay productos en el carrito
 if (empty($carrito)) {
-    $carrito_vacio = true; // [cite: 36]
+    $carrito_vacio = true; 
 } else {
     $carrito_vacio = false;
     // Calcular el precio total
-    $precio_total = calcular_precio_total($carrito, $precios); // [cite: 34, 50]
+    $precio_total = calcular_precio_total($carrito, $precios);
 }
 ?>
 
@@ -83,7 +78,8 @@ if (empty($carrito)) {
     <?php 
     $nombre_cookie_valido = $_COOKIE['nombre_cliente'] ?? null;
     if ($nombre_cookie_valido): ?>
-        <p>Hola, <?= invertir_nombre($nombre_cookie_valido) ?></p> <?php endif; ?>
+        <h2>Hola, <?= invertir_nombre($nombre_cookie_valido) ?>.</h2> 
+    <?php endif; ?>
 
     <?php if ($carrito_vacio): ?>
         <p>El carrito está vacío.</p>
@@ -96,22 +92,18 @@ if (empty($carrito)) {
                 <th>Subtotal (€)</th>
             </tr>
             
-            <?php foreach ($carrito as $producto_clave => $cantidad): 
-                $nombre_producto = $nombres_completos[$producto_clave] ?? $producto_clave;
-                $precio_unitario = $precios[$producto_clave] ?? 0;
-                $subtotal = $cantidad * $precio_unitario; // [cite: 33]
-            ?>
+            <?php foreach ($carrito as $producto_clave => $cantidad): ?>
                 <tr>
-                    <td><?= $nombre_producto ?></td>
+                    <td><?= $producto_clave ?></td>
                     <td><?= $cantidad ?></td>
-                    <td><?= number_format($precio_unitario, 2, ',', '.') ?></td>
-                    <td><?= number_format($subtotal, 2, ',', '.') ?></td>
+                    <td><?= $precios[$producto_clave] ?></td>
+                    <td><?= $cantidad * $precios[$producto_clave] ?></td>
                 </tr>
             <?php endforeach; ?>
             
             <tr>
                 <td colspan="3"><strong>Total</strong></td>
-                <td><strong><?= number_format($precio_total, 2, ',', '.') ?> €</strong></td>
+                <td><strong><?= $precio_total ?> €</strong></td>
             </tr>
         </table>
 

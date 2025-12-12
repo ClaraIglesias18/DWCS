@@ -1,14 +1,12 @@
 <?php
-// Inicia la sesión al comienzo de la página
 session_start();
 require_once 'funciones.php';
 
-// Definir los precios de los libros y almacenarlos en variables de sesión
 if (!isset($_SESSION['precios'])) {
     $_SESSION['precios'] = [
-        'Libro 1' => 10.00,
-        'Libro 2' => 15.50,
-        'Libro 3' => 20.00,
+        'Libro 1 - PHP básico' => 10.00,
+        'Libro 2 - HTML y CSS' => 15.50,
+        'Libro 3 - JavaScript para principiantes' => 20.00,
     ];
 }
 
@@ -34,11 +32,10 @@ unset($_SESSION['errores']);
     <h1>Tienda de libros</h1>
 
     <?php if ($nombre_cliente): ?>
-        <h2>Bienvenido de nuevo, <?= invertir_nombre($nombre_cliente) ?>.</h2> <?php endif; ?>
+        <h2>Hola, <?= invertir_nombre($nombre_cliente) ?>.</h2> <?php endif; ?>
 
     <?php if (!empty($errores)): ?>
         <div style="color: red;">
-            <h3>¡Error al añadir al carrito!</h3>
             <ul>
                 <?php foreach ($errores as $error): ?>
                     <li><?= $error ?></li> 
@@ -60,9 +57,9 @@ unset($_SESSION['errores']);
             <label for="producto">Producto:</label>
             <select id="producto" name="producto">
                 <option value="">-- Selecciona un libro --</option>
-                <option value="Libro 1">Libro 1 - PHP básico</option>
-                <option value="Libro 2">Libro 2 - HTML y CSS</option>
-                <option value="Libro 3">Libro 3 - JavaScript para principiantes</option>
+                <option>Libro 1 - PHP básico</option>
+                <option>Libro 2 - HTML y CSS</option>
+                <option>Libro 3 - JavaScript para principiantes</option>
             </select>
         </p>
 

@@ -1,23 +1,23 @@
 <?php
-// editar.php - Página dedicada a la edición de un solo producto.
-
 require_once 'funciones.php';
 
 $producto_a_editar = null;
 $mensaje_error = '';
 
-// --- 1. Obtener el ID del producto a editar de la URL (GET) ---
+// Comporbamos que nos viene el ID del prodcuto desde index.php para poder trabajar con el
 if (!isset($_GET['id']) || (int)$_GET['id'] <= 0) {
-    // Si no hay ID válido, redirigir
+    // Si no hay ID válido, redirigir a index.php con mensaje de error
     header("Location: index.php?mensaje=" . urlencode("ERROR: ID de producto no especificado o inválido."));
     exit();
 }
 
+// Recogemos el ID
 $id_edicion = (int)$_GET['id'];
 
-// --- 2. Cargar el Producto desde la Base de Datos ---
+// Cargamos la base de datos
 $conexion = conectar_db();
 
+// Si la conexion es exitosa llamamos a la funcion para obetener el producto por su ID
 if ($conexion) {
     $producto_a_editar = obtener_producto_por_id($conexion, $id_edicion);
     cerrar_db($conexion);
@@ -25,7 +25,7 @@ if ($conexion) {
     $mensaje_error = "Error al conectar con la base de datos para cargar el producto.";
 }
 
-// --- 3. Verificación de Existencia ---
+// Si no se encuentra el producto, redirigir a index.php con mensaje de error
 if (!$producto_a_editar) {
     header("Location: index.php?mensaje=" . urlencode("ERROR: El producto con ID $id_edicion no existe."));
     exit();

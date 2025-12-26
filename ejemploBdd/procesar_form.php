@@ -1,16 +1,23 @@
 <?php
 require_once 'funciones.php';
-// 2. Lógica para añadir un nuevo producto 
+
+// -------- MANEJO DE PETICIONES POST --------
+// PROCESAMOS EL FORMULARIO PARA AÑADIR O ACTUALIZAR UN PRODUCTO
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+    // Comprobamos si nos llega una peticion POST con el campo de id_edicion(que viene de la pagina de editar.php)
     if (isset($_POST['id_edicion'])) {
+        // Recogemos los datos del formulario en variables
         $id = (int)$_POST['id_edicion'];
         $nombre = trim($_POST['nombre']);
         $precio = (float)$_POST['precio'];
 
+        // Intentar actualizar si hay datos
         if ($id > 0 && !empty($nombre) && $precio > 0) {
             $conexion = conectar_db();
             if ($conexion) {
-                // LLAMADA A LA FUNCIÓN DE ACTUALIZACIÓN
+                // Llamamos a la funcion de actualizar
                 if (actualizar_producto($conexion, $id, $nombre, $precio)) {
                     $mensaje = "¡Producto **$nombre** (ID: $id) actualizado con éxito!";
                 } else {
@@ -22,19 +29,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $mensaje = "ERROR: Datos inválidos para actualizar.";
         }
 
-        header("Location: index.php?mensaje=" . urlencode($mensaje) . "&id=" . $modo_edicion);
+        // Redirigir de vuelta a index.php pasandole por GET el mensaje correspondiente
+        header("Location: index.php?mensaje=" . urlencode($mensaje));
         exit();
     }
-    // Verificar que los datos necesarios existen
+
+    // Al no haber entrado en el anterior if, comprobamos si nos llegan peticiones POST para insertar por parte de index.php
     if (isset($_POST['nombre']) && isset($_POST['precio'])) {
+        // Recogemos los datos del formulario en variables
         $nombre = trim($_POST['nombre']);
         $precio = (float)$_POST['precio'];
 
-        // Solo intentar insertar si hay datos
+        // Intentar insertar si hay datos
         if (!empty($nombre) && $precio > 0) {
             $conexion = conectar_db();
 
             if ($conexion) {
+                // Llamamos a la funcion de insertar
                 if (insertar_producto($conexion, $nombre, $precio)) {
                     $mensaje = "¡Producto **$nombre** añadido con éxito!";
                 } else {
@@ -46,19 +57,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $mensaje = "ERROR: El nombre y el precio deben ser válidos.";
         }
 
+        // Redirigir de vuelta a index.php pasandole por GET el mensaje correspondiente
         header("Location: index.php?mensaje=" . urlencode($mensaje));
         exit();
     }
 }
 
-// --- 1. Manejo de Petición GET para BORRADO (unsafe method) ---
-// Comprobamos si recibimos 'accion=borrar' y el 'id' por la URL ($_GET)
+// -------- MANEJO DE PETICIONES GET --------
+// PROCESAMOS LAS PETICIONES GET PARA BORRAR UN PRODUCTO
+
 if (isset($_GET['accion']) && $_GET['accion'] === 'borrar' && isset($_GET['id'])) {
+    // Recogemos el ID del producto a borrar
     $id_a_borrar = (int)$_GET['id'];
 
+    // Intentar borrar si el ID es válido
     if ($id_a_borrar > 0) {
         $conexion = conectar_db();
         if ($conexion) {
+            // Llamamos a la funcion de borrar
             if (borrar_producto($conexion, $id_a_borrar)) {
                 $mensaje = "¡Producto con ID **$id_a_borrar** eliminado con éxito! (Vía GET)";
             } else {
@@ -66,8 +82,7 @@ if (isset($_GET['accion']) && $_GET['accion'] === 'borrar' && isset($_GET['id'])
             }
             cerrar_db($conexion);
 
-            // REDIRECCIÓN IMPORTANTE: Evita que el usuario borre accidentalmente 
-            // al recargar la página (PRG Pattern).
+            // Redirigir de vuelta a index.php para que se actualice la pagina pasandole por GET el mensaje correspondiente
             header("Location: index.php?mensaje=" . urlencode($mensaje));
             exit();
         
@@ -76,25 +91,5 @@ if (isset($_GET['accion']) && $_GET['accion'] === 'borrar' && isset($_GET['id'])
         $mensaje = "ERROR: ID de producto inválido para borrar.";
     }
 }
-
-// --- Manejo de Petición GET para EDITAR ---
-/**if (isset($_GET['accion']) && $_GET['accion'] === 'editar' && isset($_GET['id'])) {
-    $id_edicion = (int)$_GET['id'];
-
-    if ($id_edicion > 0) {
-        $conexion = conectar_db();
-        $producto_a_editar = obtener_producto_por_id($conexion, $id_edicion);
-        cerrar_db($conexion);
-
-        if ($producto_a_editar) {
-            $modo_edicion = true; // Activamos el modo edición
-            $mensaje = "Editando producto: **" . htmlspecialchars($producto_a_editar['nombre']) . "**";
-            header("Location: index.php?mensaje=" . urlencode($mensaje) . "&modo_edicion=" . $modo_edicion);
-            exit();
-        } else {
-            $mensaje = "ERROR: Producto a editar no encontrado.";
-        }
-    }
-}**/
 
 ?>

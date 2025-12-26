@@ -1,18 +1,31 @@
 <?php
 session_start();
 
-// Si ya está autenticado, redirigir al panel inmediatamente
-if (isset($_SESSION['autenticado']) && $_SESSION['autenticado'] === true) {
-    header('Location: privado.php');
-    exit();
+if (isset($_GET['mensaje'])) {
+    $mensaje = $_GET['mensaje'];
+} else {
+    $mensaje = '';
 }
 
-// Recuperar el nombre de usuario de la cookie "recuerdame" si existe
-$usuario_recordado = $_COOKIE['recuerdame'] ?? '';
+// 1. Verificamos si existe la variable de sesión que identifica al usuario
+if (isset($_SESSION['usuario_id']) && isset($_SESSION['tipo'])) {
+    
+    // 2. Redirigimos según el tipo que ya tenemos guardado en la sesión
+    switch ($_SESSION['tipo']) {
+        case 'admin':
+            header("Location: admin.php");
+            break;
+        case 'usuario':
+            header("Location: perfil.php");
+            break;
+        default:
+            // Por si acaso hay un tipo no definido, lo mandamos a una página genérica
+            header("Location: login.php");
+            break;
+    }
+    exit(); 
+}
 
-// Recuperar y limpiar el mensaje de error de la sesión
-$error_mensaje = $_SESSION['error_login'] ?? '';
-unset($_SESSION['error_login']);
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -26,25 +39,21 @@ unset($_SESSION['error_login']);
 <body>
     <h1>Iniciar Sesión</h1>
 
-    <?php if ($error_mensaje): ?>
-        <p class="error"><?= htmlspecialchars($error_mensaje) ?></p>
+    <?php if ($mensaje): ?>
+        <p class="error"><?= $mensaje ?></p>
     <?php endif; ?>
 
-    <form action="verificar.php" method="POST">
+    <form action="procesar.php" method="POST">
         <p>
-            <label for="usuario">Usuario (admin):</label>
-            <input type="text" id="usuario" name="usuario" 
-                   value="<?= htmlspecialchars($usuario_recordado) ?>" required>
+            <label for="correo">Correo:</label>
+            <input type="text" id="correo" name="correo" required>
         </p>
         <p>
-            <label for="password">Contraseña (1234):</label>
-            <input type="password" id="password" name="password" required>
-        </p>
-        <p>
-            <input type="checkbox" id="recordarme" name="recordarme">
-            <label for="recordarme">Recordarme (7 días)</label>
+            <label for="contraseña">Contraseña (1234):</label>
+            <input type="password" id="contraseña" name="contraseña" required>
         </p>
         <button type="submit">Entrar</button>
     </form>
+    <a href="registro.php">¿No tienes cuenta? Regístrate aquí</a>
 </body>
 </html>

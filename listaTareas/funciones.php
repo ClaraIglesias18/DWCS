@@ -15,8 +15,8 @@ function conectar_db() {
     return $conexion;
 }
 
-function obtener_productos($conexion) {
-    $sql = "SELECT id, nombre, precio FROM productos";
+function obtener_tareas($conexion) {
+    $sql = "SELECT * FROM tareas";
 
     $resultado = mysqli_query($conexion, $sql);
 
@@ -24,16 +24,16 @@ function obtener_productos($conexion) {
         return false;
     }
 
-    $productos = [];
+    $usuarios = [];
     while ($fila = mysqli_fetch_assoc($resultado)) {
-        $productos[] = $fila;
+        $usuarios[] = $fila;
     }
 
-    return $productos;
+    return $usuarios;
 }
 
-function insertar_producto($conexion, $nombre, $precio) {
-    $sql = "INSERT INTO productos (nombre, precio) VALUES (?, ?)";
+function insertar_tarea($conexion, $titulo, $completada, $fecha_creacion) {
+    $sql = "INSERT INTO tareas (titulo, completada, fecha_creacion) VALUES (?, ?, ?)";
 
     $stmt = mysqli_prepare($conexion, $sql);
 
@@ -41,7 +41,7 @@ function insertar_producto($conexion, $nombre, $precio) {
         return false;
     }
 
-    mysqli_stmt_bind_param($stmt, "sd", $nombre, $precio);
+    mysqli_stmt_bind_param($stmt, "sis", $titulo, $completada, $fecha_creacion);
 
     $resultado = mysqli_stmt_execute($stmt);
 
@@ -50,8 +50,8 @@ function insertar_producto($conexion, $nombre, $precio) {
     return $resultado;
 }
 
-function borrar_producto($conexion, $id) {
-    $sql = "DELETE FROM productos WHERE id = ?";
+function eliminar_tarea($conexion, $id) {
+    $sql = "DELETE FROM tareas WHERE id = ?";
 
     $stmt = mysqli_prepare($conexion, $sql);
 
@@ -69,9 +69,8 @@ function borrar_producto($conexion, $id) {
     return $resultado;
 }
 
-function obtener_producto_por_id($conexion, $id) {
-    $sql = "SELECT id, nombre, precio FROM productos WHERE id = ?";
-
+function obtener_tarea_por_id($conexion, $id) {
+    $sql = "SELECT id, titulo, completada, fecha_creacion FROM tareas WHERE id = ?";
     $stmt = mysqli_prepare($conexion, $sql);
     if ($stmt == false) {
         return false;
@@ -85,17 +84,17 @@ function obtener_producto_por_id($conexion, $id) {
     $resultado = mysqli_stmt_get_result($stmt);
 
     if ($resultado && mysqli_num_rows($resultado) === 1) {
-        $producto = mysqli_fetch_assoc($resultado);
+        $usuario = mysqli_fetch_assoc($resultado);
         mysqli_stmt_close($stmt);
-        return $producto;
+        return $usuario;
     }
 
     mysqli_stmt_close($stmt);
     return false;
 }
 
-function actualizar_producto($conexion, $id, $nombre, $precio) {
-    $sql = "UPDATE productos SET nombre = ?, precio = ? WHERE id = ?";
+function actualizar_tarea($conexion, $id, $titulo, $completada) {
+    $sql = "UPDATE tareas SET titulo = ?, completada = ? WHERE id = ?";
 
     $stmt = mysqli_prepare($conexion, $sql);
     if ($stmt == false) {
@@ -103,14 +102,13 @@ function actualizar_producto($conexion, $id, $nombre, $precio) {
     }
 
     $id_entero = (int)$id;
-    mysqli_stmt_bind_param($stmt, "sdi", $nombre, $precio, $id_entero); 
+    mysqli_stmt_bind_param($stmt, "sii", $titulo, $completada, $id_entero); 
 
     $resultado = mysqli_stmt_execute($stmt);
     mysqli_stmt_close($stmt);
 
     return $resultado;
 }
-
 
 function cerrar_db($conexion) {
     if ($conexion) {

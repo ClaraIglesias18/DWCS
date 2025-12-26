@@ -1,9 +1,5 @@
 <?php
-// 1. Incluir el archivo de funciones para tener la lógica disponible
 require_once 'funciones.php';
-
-$producto_a_editar = null; // Variable para guardar los datos del producto si estamos editando
-$modo_edicion = false; // Bandera para saber si estamos en modo edición
 
 if (isset($_GET['mensaje'])) {
     $mensaje = $_GET['mensaje'];
@@ -11,7 +7,7 @@ if (isset($_GET['mensaje'])) {
     $mensaje = '';
 }
 
-// 3. Lógica para obtener y mostrar los productos
+// Lógica para obtener y mostrar los productos
 $productos = [];
 $conexion = conectar_db();
 
@@ -70,12 +66,10 @@ if ($conexion) {
                         <td><?php echo $producto['id']; ?></td>
                         <td><?php echo $producto['nombre']; ?></td>
                         <td>$<?php echo $producto['precio']; ?></td>
-                        <td><a href="procesar_form.php?accion=borrar&id=<?php echo $producto['id']; ?>"
-                                onclick="return confirm('¿Seguro que quieres borrar el producto <?php echo ($producto['nombre']); ?>?')"
-                                style="color: red;">
+                        <td><a href="procesar_form.php?accion=borrar&id=<?php echo $producto['id']; ?>">
                                 Borrar
                             </a>
-                            <a href="editar.php?accion=editar&id=<?php echo htmlspecialchars($producto['id']); ?>" style="color: blue; margin-right: 10px;">
+                            <a href="editar.php?accion=editar&id=<?php echo htmlspecialchars($producto['id']); ?>">
                                 Editar
                             </a>
                         </td>
@@ -83,8 +77,6 @@ if ($conexion) {
                 <?php endforeach; ?>
             </tbody>
         </table>
-    <?php elseif ($productos === false): ?>
-        <p>No se pudieron cargar los productos de la base de datos.</p>
     <?php else: ?>
         <p>No hay productos en el inventario.</p>
     <?php endif; ?>

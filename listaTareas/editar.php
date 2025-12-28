@@ -15,7 +15,7 @@ if(!isset($_SESSION['usuario_id'])) {
 if (!isset($_GET['id'])) {
     // Si no hay ID válido, redirigir a index.php con mensaje de error
     $mensaje = "ERROR: ID no valido.";
-    header('Location: index.php?messaje=' . $mensaje);
+    header('Location: index.php?mensaje=' . $mensaje);
     exit();
 }
 
@@ -26,7 +26,7 @@ $id_edicion = (int)$_GET['id'];
 $conexion = conectar_db();
 if (!$conexion) {
     $mensaje = "ERROR: No se pudo conectar a la base de datos.";
-    header('Location: index.php?messaje=' . $mensaje);
+    header('Location: index.php?mensaje=' . $mensaje);
     exit();
 }
 
@@ -37,7 +37,7 @@ cerrar_db($conexion);
 // Si no se encuentra el tarea, redirigir a index.php con mensaje de error
 if (!$tarea_a_editar) {
     $mensaje = "ERROR: La tarea no existe";
-    header('Location: index.php?messaje=' . $mensaje);
+    header('Location: index.php?mensaje=' . $mensaje);
     exit();
 }
 ?>

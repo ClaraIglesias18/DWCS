@@ -1,15 +1,21 @@
 <?php
+session_start();
 require_once 'funciones.php';
 
 $tarea_a_editar = null;
 $mensaje = '';
 
+// Validamos si el usuario esta inciciado
+if(!isset($_SESSION['usuario_id'])) {
+    header('Location: login.php');
+    exit();
+}
+
 // Comporbamos que nos viene el ID de la tarea desde index.php para poder trabajar con ella
 if (!isset($_GET['id'])) {
     // Si no hay ID válido, redirigir a index.php con mensaje de error
     $mensaje = "ERROR: ID no valido.";
-    $_SESSION['mensaje'] = $mensaje;
-    header('Location: index.php');
+    header('Location: index.php?messaje=' . $mensaje);
     exit();
 }
 
@@ -20,8 +26,7 @@ $id_edicion = (int)$_GET['id'];
 $conexion = conectar_db();
 if (!$conexion) {
     $mensaje = "ERROR: No se pudo conectar a la base de datos.";
-    $_SESSION['mensaje'] = $mensaje;
-    header('Location: index.php');
+    header('Location: index.php?messaje=' . $mensaje);
     exit();
 }
 
@@ -32,8 +37,7 @@ cerrar_db($conexion);
 // Si no se encuentra el tarea, redirigir a index.php con mensaje de error
 if (!$tarea_a_editar) {
     $mensaje = "ERROR: La tarea no existe";
-    $_SESSION['mensaje'] = $mensaje;
-    header('Location: index.php');
+    header('Location: index.php?messaje=' . $mensaje);
     exit();
 }
 ?>

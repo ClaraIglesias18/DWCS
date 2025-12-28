@@ -15,25 +15,38 @@ function conectar_db() {
     return $conexion;
 }
 
-function obtener_tareas($conexion) {
-    $sql = "SELECT * FROM tareas";
+// FUNCIONES PARA GETIONAR TAREAS
 
-    $resultado = mysqli_query($conexion, $sql);
+function obtener_tareas($conexion, $id_usuario) {
+    $sql = "SELECT * FROM tareas where usuario_id = ?";
+
+    
+    $stmt = mysqli_prepare($conexion, $sql);
+
+    if ($stmt == false) {
+        return false;
+    }
+
+    mysqli_stmt_bind_param($stmt, "i", $id_usuario);
+
+    mysqli_stmt_execute($stmt);
+
+    $resultado = mysqli_stmt_get_result($stmt);
 
     if ($resultado == false) {
         return false;
     }
 
-    $usuarios = [];
+    $tareas = [];
     while ($fila = mysqli_fetch_assoc($resultado)) {
-        $usuarios[] = $fila;
+        $tareas[] = $fila;
     }
 
-    return $usuarios;
+    return $tareas;
 }
 
-function insertar_tarea($conexion, $titulo, $completada, $fecha_creacion) {
-    $sql = "INSERT INTO tareas (titulo, completada, fecha_creacion) VALUES (?, ?, ?)";
+function insertar_tarea($conexion, $titulo, $completada, $fecha_creacion, $id_usuario) {
+    $sql = "INSERT INTO tareas (titulo, completada, fecha_creacion, usuario_id) VALUES (?, ?, ?, ?)";
 
     $stmt = mysqli_prepare($conexion, $sql);
 
@@ -41,7 +54,7 @@ function insertar_tarea($conexion, $titulo, $completada, $fecha_creacion) {
         return false;
     }
 
-    mysqli_stmt_bind_param($stmt, "sis", $titulo, $completada, $fecha_creacion);
+    mysqli_stmt_bind_param($stmt, "sisi", $titulo, $completada, $fecha_creacion, $id_usuario);
 
     $resultado = mysqli_stmt_execute($stmt);
 
@@ -108,6 +121,51 @@ function actualizar_tarea($conexion, $id, $titulo, $completada) {
     mysqli_stmt_close($stmt);
 
     return $resultado;
+}
+
+// FUNCIONES PARA GESTIONAR USUARIOS
+
+function insertar_usuario($conexion, $usuario, $password) {
+    $sql = "INSERT INTO usuarios (username, password) VALUES (?, ?)";
+
+    $stmt = mysqli_prepare($conexion, $sql);
+
+    if ($stmt == false) {
+        return false;
+    }
+
+    mysqli_stmt_bind_param($stmt, "ss", $usuario, $password);
+
+    $resultado = mysqli_stmt_execute($stmt);
+
+    mysqli_stmt_close($stmt);
+
+    return $resultado;
+}
+
+function obtener_usuario_por_nombre($conexion, $usuario) {
+    $sql = "SELECT id, username, password FROM usuarios WHERE username = ?";
+
+    $stmt = mysqli_prepare($conexion, $sql);
+
+    if ($stmt == false) {
+        return false;
+    }
+
+    mysqli_stmt_bind_param($stmt, "s", $usuario);
+
+    mysqli_stmt_execute($stmt);
+
+    $resultado = mysqli_stmt_get_result($stmt);
+
+    if ($resultado && mysqli_num_rows($resultado) === 1) {
+        $usuario = mysqli_fetch_assoc($resultado);
+        mysqli_stmt_close($stmt);
+        return $usuario;
+    }
+
+    mysqli_stmt_close($stmt);
+    return false;
 }
 
 function cerrar_db($conexion) {

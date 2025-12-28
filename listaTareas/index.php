@@ -2,6 +2,12 @@
 session_start();
 require_once('funciones.php');
 
+// Validamos si el usuario esta iniciado
+if (!isset($_SESSION['usuario_id'])) {
+    header('Location: login.php');
+    exit();
+}
+
 if (isset($_GET['mensaje'])) {
     $mensaje = $_GET['mensaje'];
 } else {
@@ -17,7 +23,7 @@ if (!$conexion) {
 }
 
 // Obtenemos las tareas
-$tareas = obtener_tareas($conexion);
+$tareas = obtener_tareas($conexion, $_SESSION['usuario_id']);
 cerrar_db($conexion);
 
 ?>
@@ -35,6 +41,7 @@ cerrar_db($conexion);
             --danger: #e74c3c;
             --dark: #2c3e50;
             --light: #f4f7f6;
+            --secondary: #6c757d;
         }
 
         body {
@@ -52,6 +59,36 @@ cerrar_db($conexion);
             padding: 30px;
             border-radius: 12px;
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Cabecera con título y botón de logout */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 15px;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 1.8rem;
+        }
+
+        .btn-logout {
+            text-decoration: none;
+            background: var(--secondary);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 6px;
+            font-size: 0.85em;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+
+        .btn-logout:hover {
+            background: var(--dark);
         }
 
         h1 {
@@ -173,6 +210,10 @@ cerrar_db($conexion);
 <body>
 
     <div class="container">
+        <div class="header">
+            <h1>📝 Mis Tareas</h1>
+            <a href="logout.php" class="btn-logout">Cerrar Sesión</a>
+        </div>
         <h1>📝 Mis Tareas</h1>
 
         <?php if (!empty($mensaje)): ?>

@@ -1,4 +1,5 @@
 <?php
+//TODO: filtros en las peliculas en base a genero, director, año, etc.
 session_start();
 require_once 'funciones.php';
 

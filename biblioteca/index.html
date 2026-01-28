@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Mi Biblioteca</title>
+    <link rel="stylesheet" href="estilos.css">
+</head>
+<body>
+    <h1>Gestión de Biblioteca</h1>
+
+    <section>
+        <h2>Autores</h2>
+        <a href="form_autor.html" class="btn-nuevo">Nuevo Autor</a>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Nacionalidad</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>Ejemplo Autor</td>
+                    <td>España</td>
+                    <td>
+                        <a href="form_autor.html?id=1">Editar</a>
+                        <a href="eliminar_autor.php?id=1">Eliminar</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <section>
+        <h2>Libros</h2>
+        <a href="form_libro.html" class="btn-nuevo">Nuevo Libro</a>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Título</th>
+                    <th>Año</th>
+                    <th>Autor</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>Ejemplo Libro</td>
+                    <td>2024</td>
+                    <td>Autor Ejemplo</td>
+                    <td>
+                        <a href="form_libro.html?id=1">Editar</a>
+                        <a href="eliminar_libro.php?id=1">Eliminar</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+</body>
+</html>

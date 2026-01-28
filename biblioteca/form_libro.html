@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Formulario de Libro</title>
+    <link rel="stylesheet" href="estilos.css">
+</head>
+<body>
+    <h1>Datos del Libro</h1>
+    <form action="guardar_libro.php" method="POST">
+        <input type="hidden" name="id" value="">
+
+        <label for="titulo">Título del Libro:</label><br>
+        <input type="text" id="titulo" name="titulo" required><br><br>
+
+        <label for="anio">Año de publicación:</label><br>
+        <input type="number" id="anio" name="anio"><br><br>
+
+        <label for="autor_id">Autor:</label><br>
+        <select id="autor_id" name="autor_id">
+            <option value="">Selecciona un autor...</option>
+            <option value="1">Autor de prueba</option>
+        </select><br><br>
+
+        <button type="submit">Guardar Libro</button>
+        <a href="index.html">Volver atrás</a>
+    </form>
+</body>
+</html>

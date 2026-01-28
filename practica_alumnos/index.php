@@ -13,6 +13,7 @@ if (!isset($_SESSION['id_usuario'])) {
 if (isset($_SESSION['msg'])) {
     $msg = $_SESSION['msg'];
     unset($_SESSION['msg']);
+    
 } else {
     $msg = "";
 }

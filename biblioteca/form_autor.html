@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Formulario de Autor</title>
+    <link rel="stylesheet" href="estilos.css">
+</head>
+<body>
+    <h1>Datos del Autor</h1>
+    <form action="guardar_autor.php" method="POST">
+        <input type="hidden" name="id" value="">
+
+        <label for="nombre">Nombre:</label><br>
+        <input type="text" id="nombre" name="nombre" placeholder="Nombre completo" required><br><br>
+
+        <label for="nacionalidad">Nacionalidad:</label><br>
+        <input type="text" id="nacionalidad" name="nacionalidad" placeholder="Ej: Mexicana"><br><br>
+
+        <button type="submit">Guardar Autor</button>
+        <a href="index.html">Volver atrás</a>
+    </form>
+</body>
+</html>

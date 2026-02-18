@@ -30,3 +30,23 @@ function obtener_preguntas_correctas($conexion, $id_test) {
     mysqli_stmt_close($stmt);
     return $preguntas;
 }
+
+function obtener_pregunta_id($conexion, $id_pregunta) {
+    $sql = "SELECT * FROM preguntas WHERE id_pregunta = ?";
+    $stmt = mysqli_prepare($conexion, $sql);
+    mysqli_stmt_bind_param($stmt, "i", $id_pregunta);
+    mysqli_stmt_execute($stmt);
+    $resultado = mysqli_stmt_get_result($stmt);
+    $pregunta = mysqli_fetch_assoc($resultado);
+    mysqli_stmt_close($stmt);
+    return $pregunta;
+}
+
+function actualizar_pregunta($conexion, $id_pregunta, $enunciado, $op_a, $op_b, $op_c, $correcta) {
+    $sql = "UPDATE preguntas SET enunciado = ?, op_a = ?, op_b = ?, op_c = ?, correcta = ? WHERE id_pregunta = ?";
+    $stmt = mysqli_prepare($conexion, $sql);
+    mysqli_stmt_bind_param($stmt, "sssssi", $enunciado, $op_a, $op_b, $op_c, $correcta, $id_pregunta);
+    $resultado = mysqli_stmt_execute($stmt);
+    mysqli_stmt_close($stmt);
+    return $resultado;
+}

@@ -8,7 +8,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nombre = $_POST['nombre'];
     $email = $_POST['email'];
     $password = $_POST['password'];
-    $rol = $_POST['rol']; // 'ADMIN' o 'NORMAL'
+    $tipo = $_POST['tipo']; // 'ADMIN' o 'NORMAL'
 
     // Aquí puedes agregar la lógica para guardar los datos en una base de datos
     // Por ejemplo, usando PDO para conectarte a una base de datos MySQL
@@ -20,7 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         header('Location: registro.php');
         exit;
     } else {
-        $registro = registrar_usuario($conexion, $nombre, $email, $password, $rol);
+        $registro = registrar_usuario($conexion, $nombre, $email, $password, $tipo);
         mysqli_close($conexion);
 
         if ($registro) {

@@ -80,6 +80,7 @@ $resultados = obtener_resultados_usuario($conexion, $_SESSION['id_usuario']);
                                 <td><a href="realizar_test.php?id=<?php echo $test['id_test']; ?>">Realizar Test</a>
                                     <?php if ($tipo === 'admin'): ?>
                                         <a href="eliminar_test.php?id=<?php echo $test['id_test']; ?>">Eliminar</a>
+                                        <a href="editar_test.php?id=<?php echo $test['id_test']; ?>">Editar</a>
                                     <?php endif; ?>
                                 </td>
                             </tr>

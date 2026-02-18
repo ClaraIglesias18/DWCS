@@ -60,3 +60,6 @@ $preguntas = obtener_preguntas($conexion, $id_test);
 
             <button type="submit">Enviar Test</button>
         </form>
+    </div>
+</body>
+</html>

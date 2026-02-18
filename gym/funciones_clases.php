@@ -35,3 +35,23 @@ function obtener_cupo($conexion, $id_clase) {
     mysqli_stmt_close($stmt);
     return $cupo['cupo_maximo'];
 }
+
+function obtener_clase_id($conexion, $id_clase) {
+    $sql = "SELECT * FROM clases WHERE id = ?";
+    $stmt = mysqli_prepare($conexion, $sql);
+    mysqli_stmt_bind_param($stmt, "i", $id_clase);
+    mysqli_stmt_execute($stmt);
+    $resultado = mysqli_stmt_get_result($stmt);
+    $clase = mysqli_fetch_assoc($resultado);
+    mysqli_stmt_close($stmt);
+    return $clase;
+}
+
+function editar_clase($conexion, $id_clase, $actividad, $hora, $dia_semana, $cupo_maximo) {
+    $sql = "UPDATE clases SET actividad = ?, dia_semana = ?, hora = ?, cupo_maximo = ? WHERE id = ?";
+    $stmt = mysqli_prepare($conexion, $sql);
+    mysqli_stmt_bind_param($stmt, "sssii", $actividad, $dia_semana, $hora, $cupo_maximo, $id_clase);
+    $resultado = mysqli_stmt_execute($stmt);
+    mysqli_stmt_close($stmt);
+    return $resultado;
+}

@@ -25,13 +25,22 @@ function obtener_test_id($conexion, $id_test) {
     $resultado = mysqli_stmt_get_result($stmt);
     $test = mysqli_fetch_assoc($resultado);
     mysqli_stmt_close($stmt);
-    return $test['id_test'];
+    return $test;
 }
 
 function eliminar_test($conexion, $id_test) {
     $sql = "DELETE FROM tests WHERE id_test = ?";
     $stmt = mysqli_prepare($conexion, $sql);
     mysqli_stmt_bind_param($stmt, "i", $id_test);
+    $resultado = mysqli_stmt_execute($stmt);
+    mysqli_stmt_close($stmt);
+    return $resultado;
+}
+
+function actualizar_test($conexion, $id_test, $titulo) {
+    $sql = "UPDATE tests SET titulo = ? WHERE id_test = ?";
+    $stmt = mysqli_prepare($conexion, $sql);
+    mysqli_stmt_bind_param($stmt, "si", $titulo, $id_test);
     $resultado = mysqli_stmt_execute($stmt);
     mysqli_stmt_close($stmt);
     return $resultado;

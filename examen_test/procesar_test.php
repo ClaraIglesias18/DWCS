@@ -17,16 +17,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $aciertos = 0;
     $total_preguntas = count($preguntas_correctas);
 
-    var_dump($respuestas_usuario);
-    var_dump($preguntas_correctas);
-
     // 2. Lógica de corrección
     foreach ($preguntas_correctas as $pregunta) {
         $id_pregunta = $pregunta['id_pregunta'];
-        $solucion = $pregunta['correcta'];
 
         // Si el usuario respondió a esta pregunta y coincide con la solución
-        if (isset($respuestas_usuario[$id_pregunta]) && $respuestas_usuario[$id_pregunta] === $solucion) {
+        if ($respuestas_usuario[$id_pregunta] === $pregunta['correcta']) {
             $aciertos++;
         }
     }

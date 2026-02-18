@@ -91,6 +91,7 @@ mysqli_close($conexion);
                             <td><a href="reservar.php?id=<?php echo $clase['id']; ?>" style="color: green; font-weight: bold;">Reservar</a>
                                 <?php if ($rol === 'admin'): ?>
                                     <a href="eliminar_clase.php?id=<?php echo $clase['id']; ?>" style="color: red; font-weight: bold;">Eliminar</a>
+                                    <a href="editar_clase.php?id=<?php echo $clase['id']; ?>" style="color: blue; font-weight: bold;">Editar</a>
                                 <?php endif; ?>
                             </td>
                         </tr>

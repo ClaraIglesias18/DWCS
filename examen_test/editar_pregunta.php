@@ -67,3 +67,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 <button type="submit">Guardar Cambios</button>
             </form>
+        </div>
+    </body>
+</html>

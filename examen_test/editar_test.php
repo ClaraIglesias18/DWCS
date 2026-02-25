@@ -61,3 +61,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <a href="editar_pregunta.php?id_pregunta=<?php echo $pregunta['id_pregunta']; ?>&id_test=<?php echo $test['id_test']; ?>">Editar Pregunta</a>
                 </div>
             <?php endforeach; ?>
+        </div>
+    </body>
+</html>

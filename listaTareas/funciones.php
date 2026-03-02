@@ -1,8 +1,8 @@
 <?php
 define('DB_HOST', 'localhost');
 define('DB_USER', 'root');
-define('DB_PASS', 'abc123.');
-define('DB_NAME', 'tienda');
+define('DB_PASS', '');
+define('DB_NAME', 'ejercicio_tareas');
 
 
 function conectar_db() {

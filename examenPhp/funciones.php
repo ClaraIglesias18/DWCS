@@ -1,6 +1,10 @@
 <?php
 function invertir_nombre($nombre) {
-    return strrev($nombre); 
+    $nombre_invertido = "";
+    for($i = strlen($nombre) - 1; $i >= 0; $i--) {
+        $nombre_invertido .= $nombre[$i];
+    }
+    return $nombre_invertido; 
 }
 
 function validar_vacio($valor) {

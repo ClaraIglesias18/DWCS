@@ -10,8 +10,12 @@ if (!isset($_SESSION['precios'])) {
     ];
 }
 
+$nombre_cliente = null;
+
 // Comprobar si existe la cookie del nombre del cliente
 $nombre_cliente = $_COOKIE['nombre_cliente'] ?? null;
+
+// Controla que aparezca el campo de introducir el nombre en funcion de si ya existe la cookie de nombre
 $mostrar_nombre_campo = empty($nombre_cliente);
 
 // Obtener mensajes de error de la sesión (si vienen de carrito.php)

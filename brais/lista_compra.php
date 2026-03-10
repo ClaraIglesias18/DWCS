@@ -33,6 +33,7 @@ if(isset($_GET['item'])) {
             <?php foreach($_SESSION['lista'] as $item): ?>
                 <li><?= htmlspecialchars($item) ?><a href="lista_compra.php?item=<?= $item ?>"> (Borrar)</a></li>
             <?php endforeach; ?>
+            <!-- <li>Pipas</li> -->
         </ul>
     </body>
 </html>

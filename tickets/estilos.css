@@ -1,0 +1,39 @@
+:root { 
+    --primary: #2c3e50; --secondary: #3498db; --danger: #e74c3c; --success: #27ae60; 
+}
+body { 
+    font-family: 'Segoe UI', sans-serif; background: #f4f7f6; margin: 0; padding: 20px; 
+}
+.container { 
+    max-width: 350px; margin: auto; margin-top: 100px; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); 
+}
+h1 { 
+    color: var(--primary); text-align: center; 
+}
+form { 
+    display: flex; flex-direction: column; gap: 10px; 
+}
+input, select, textarea { 
+    padding: 10px; border: 1px solid #ddd; border-radius: 4px; 
+}
+button { 
+    padding: 10px; background: var(--secondary); color: white; border: none; cursor: pointer; border-radius: 4px; 
+}
+table { 
+    width: 100%; border-collapse: collapse; margin-top: 20px; 
+}
+th, td { 
+    padding: 12px; border-bottom: 1px solid #eee; text-align: left; 
+}
+.badge { 
+    padding: 4px 8px; border-radius: 4px; font-size: 0.8rem; font-weight: bold; 
+}
+.Abierta { 
+    background: #fff3cd; color: #856404; 
+}
+.En.Proceso { 
+    background: #cce5ff; color: #004085; 
+}
+.Resuelta { 
+    background: #d4edda; color: #155724; 
+}

@@ -3,7 +3,7 @@
 $servidor = "localhost";
 $usuario  = "root";      // Usuario por defecto en XAMPP
 $password = "abc123.";          // Contraseña por defecto en XAMPP (vacía)
-$base_datos = "login_bd";
+$base_datos = "tickets";
 
 // 1. Crear la conexión
 $conexion = mysqli_connect($servidor, $usuario, $password, $base_datos);

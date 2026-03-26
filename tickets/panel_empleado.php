@@ -52,7 +52,10 @@ $incidencias = obtener_incidencia_empleado($conexion, $usuario_id);
                             <td><?= $incidencia['fecha_creacion'] ?></td>
                             <td><?= $incidencia['titulo'] ?></td>
                             <td><?= $incidencia['prioridad'] ?></td>
-                            <td><?= $incidencia['estado'] ?></td>
+                            <td <?php if($incidencia['estado'] == 'Abierta'): ?>
+                            
+                            
+                            ><?= $incidencia['estado'] ?></td>
                         </tr>
                     <?php endforeach; ?>
                 <?php else: ?>

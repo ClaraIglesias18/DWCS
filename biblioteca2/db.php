@@ -2,7 +2,7 @@
 // Configuración de la base de datos
 $servidor = "localhost";
 $usuario  = "root";      // Usuario por defecto en XAMPP
-$password = "";          // Contraseña por defecto en XAMPP (vacía)
+$password = "abc123.";          // Contraseña por defecto en XAMPP (vacía)
 $base_datos = "biblioteca";
 
 // 1. Crear la conexión

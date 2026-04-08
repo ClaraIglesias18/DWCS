@@ -2,12 +2,12 @@
 require_once "db.php";
 require_once "funciones.php";
 
-if(isset($_GET['libro_id'])) {
+if (isset($_GET['libro_id'])) {
     $libro_id = $_GET['libro_id'];
     $libro = obtener_libro_por_id($conexion, $libro_id);
 }
 
-if(isset($libro)) {
+if (isset($libro)) {
     $id = $libro['id'];
     $titulo = $libro['titulo'];
     $anio_publicacion = $libro['anio_publicacion'];
@@ -26,11 +26,13 @@ $autores = obtener_autores($conexion);
 ?>
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <title>Formulario de Libro</title>
     <link rel="stylesheet" href="estilos.css">
 </head>
+
 <body>
     <h1>Datos del Libro</h1>
     <form action="procesar_libro.php" method="POST">
@@ -45,8 +47,16 @@ $autores = obtener_autores($conexion);
 
         <label for="autor_id">Autor:</label><br>
         <select id="autor_id" name="autor_id">
-            <?php foreach($autores as $autor): ?>
-                <option value="<?= $autor['id'] ?>" <?= ($autor['id'] == $autor_id) ? "selected" : "" ?>><?= $autor['nombre'] ?></option>
+            <?php foreach ($autores as $autor): ?>
+                <option value="<?= $autor['id'] ?>"
+                    <?php
+                        if ($autor['id'] == $autor_id) {
+                            echo "selected";
+                        } 
+                    ?>
+                    >
+                    <?= $autor['nombre'] ?>
+                </option>
             <?php endforeach; ?>
         </select><br><br>
 
@@ -54,4 +64,5 @@ $autores = obtener_autores($conexion);
         <a href="index.php">Volver atrás</a>
     </form>
 </body>
+
 </html>

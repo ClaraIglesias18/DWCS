@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="es">
 
@@ -105,25 +104,25 @@
         </div>
 
         <h2>📅 Mis Reservas Confirmadas</h2>
-            <div class="reservas-list">
-                    <div class="reserva-card">
-                        <div>
-                            <h3 style="margin:0;">Nombre de la pista</h3>
-                            <p style="margin:5px 0; color:#666;">
-                                📅 fecha |
-                                🕒 hora
-                            </p>
-                            <small style="color:#95a5a6;">Tipo: Tipo de pista</small>
-                        </div>
-                        <div>
-                            <a href="cancelar_reserva.php"
-                                class="btn-cancelar"
-                                onclick="return confirm('¿Estás seguro de que quieres cancelar esta reserva?')">
-                                Cancelar
-                            </a>
-                        </div>
-                    </div>
+        <div class="reservas-list">
+            <div class="reserva-card">
+                <div>
+                    <h3 style="margin:0;">Nombre de la pista</h3>
+                    <p style="margin:5px 0; color:#666;">
+                        📅 fecha |
+                        🕒 hora
+                    </p>
+                    <small style="color:#95a5a6;">Tipo: Tipo de pista</small>
+                </div>
+                <div>
+                    <a href="cancelar_reserva.php"
+                        class="btn-cancelar"
+                        onclick="return confirm('¿Estás seguro de que quieres cancelar esta reserva?')">
+                        Cancelar
+                    </a>
+                </div>
             </div>
+        </div>
 
     </div>
 

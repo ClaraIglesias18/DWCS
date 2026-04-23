@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="es">
 
@@ -88,6 +87,7 @@
             text-decoration: none;
             font-weight: bold;
         }
+
         .caja-mensaje {
             padding: 15px;
             margin: 15px 0;

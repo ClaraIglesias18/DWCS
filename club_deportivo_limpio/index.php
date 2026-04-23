@@ -91,11 +91,11 @@
 
     <div class="user-nav">
         <div>
-                Bienvenido, NombreUsuario</strong>
-                <span style="font-size: 0.8em; background: #eee; padding: 3px 8px; border-radius: 10px;">
-                    Nivel: NivelUsuario
-                </span>
-                ¿Ya eres socio? <a href="login.php">Inicia sesión</a>
+            Bienvenido, NombreUsuario</strong>
+            <span style="font-size: 0.8em; background: #eee; padding: 3px 8px; border-radius: 10px;">
+                Nivel: NivelUsuario
+            </span>
+            ¿Ya eres socio? <a href="login.php">Inicia sesión</a>
         </div>
         <div>
             <a href="perfil.php" style="text-decoration: none; color: var(--dark); margin-right: 15px;">📅 Mis Reservas</a>
@@ -106,16 +106,16 @@
     <h1>🎾 Nuestras Pistas</h1>
 
     <div class="grid-pistas">
-            <div class="pista-card">
-                <h3>Nombre Pista</h3>
-                <div class="pista-info">
-                    <span>Tipo de pista</span>
-                </div>
-
-                <a href="reserva.php?" class="btn-reservar">
-                    Reservar ahora
-                </a>
+        <div class="pista-card">
+            <h3>Nombre Pista</h3>
+            <div class="pista-info">
+                <span>Tipo de pista</span>
             </div>
+
+            <a href="reserva.php?" class="btn-reservar">
+                Reservar ahora
+            </a>
+        </div>
     </div>
 
 </body>

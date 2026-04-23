@@ -29,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         exit();
     }
 
-    if($_POST['accion'] && $_POST['accion'] == 'editar') {
+    if ($_POST['accion'] && $_POST['accion'] == 'editar') {
         $id_producto = $_POST['id_producto'];
         $nombre = $_POST['nombre'];
         $descripcion = $_POST['descripcion'];
@@ -37,7 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $categoria = $_POST['cat'];
         $estado = "Disponible";
 
-        if($_FILES['foto']['name']) {
+        if ($_FILES['foto']['name']) {
             $img = $_FILES['foto']['name'];
             $directorio = "img/";
             $ruta = $directorio . $img;
@@ -50,7 +50,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
 
         if (editar_producto($conexion, $id_producto, $nombre, $descripcion, $precio, $img, $categoria, $estado)) {
-            
+
             $_SESSION['mensaje'] = "Artículo editado correctamente";
         } else {
             $_SESSION['mensaje'] = "Error al editar el artículo";

@@ -1,34 +1,4 @@
-<?php
-session_start();
-require_once 'db.php';
-require_once 'funciones_reservas.php';
-require_once 'funciones_pistas.php';
 
-if (!isset($_SESSION['usuario_id'])) {
-    header("Location: login.php?msg=sesion_requerida");
-    exit;
-}
-
-if (isset($_GET['msg'])) {
-    $mensaje = $_GET['msg'];
-} else {
-    $mensaje = '';
-}
-
-// Recogemos datos de la URL
-$id_pista = $_GET['id_pista'] ?? 1; // Por defecto pista 1 si no hay ID
-$fecha_hoy = date('Y-m-d');
-
-// Definimos el horario completo del club
-$horario_club = ['09:00', '10:30', '12:00', '16:00', '17:30', '19:00', '20:30'];
-
-// Usamos nuestra nueva función para obtener lo que ya está pillado
-$ocupadas = obtener_horas_ocupadas($conexion, $id_pista, $fecha_hoy);
-
-$pista = obtener_pista_id($conexion, $id_pista);
-
-
-?>
 <!DOCTYPE html>
 <html lang="es">
 
@@ -139,16 +109,11 @@ $pista = obtener_pista_id($conexion, $id_pista);
 </head>
 
 <body>
-    <?php if ($mensaje): ?>
-        <div class="caja-mensaje">
-            <?php echo htmlspecialchars($mensaje); ?>
-        </div>
-    <?php endif; ?>
 
     <div class="booking-container">
         <div class="pista-header">
             <span>Estas reservando en:</span>
-            <h2><?php echo htmlspecialchars($pista['nombre']); ?></h2>
+            <h2>Pista Central (Cristal)</h2>
         </div>
 
         <div class="info-box">
@@ -156,26 +121,12 @@ $pista = obtener_pista_id($conexion, $id_pista);
         </div>
 
         <form action="procesar_reserva.php" method="POST">
-            <input type="hidden" name="id_pista" value="<?php echo $id_pista; ?>">
-
-            <input type="hidden" name="fecha" value="<?php echo $fecha_hoy; ?>">
+            <input type="hidden" name="id_pista" value="1">
 
             <div class="form-group">
                 <label for="hora">Horas disponibles:</label>
                 <select name="hora" id="hora" required>
                     <option value="">-- Elige un turno --</option>
-
-                    <?php foreach ($horario_club as $turno): ?>
-                        <?php if (!in_array($turno, $ocupadas)): ?>
-                            <option value="<?php echo $turno; ?>">
-                                <?php echo $turno; ?> - <?php echo date('H:i', strtotime($turno . ' + 90 minutes')); ?>
-                            </option>
-                        <?php else: ?>
-                            <option value="" disabled style="color: red;">
-                                <?php echo $turno; ?> (Ocupada)
-                            </option>
-                        <?php endif; ?>
-                    <?php endforeach; ?>
 
                 </select>
             </div>

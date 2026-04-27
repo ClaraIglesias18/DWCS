@@ -9,14 +9,11 @@ if (!isset($_SESSION['id_usuario']) || $_SESSION['tipo'] !== 'admin') {
 }
 
 $titulo = $_POST['titulo'];
-$id_test = crear_test($conexion, $titulo);
-if ($id_test !== false) {
-    var_dump($id_test);
-    
-    header("Location: añadir_preguntas.php?id=$id_test");
-    exit();
+if (crear_test($conexion, $titulo)) {
+    $_SESSION['msg'] = "Test creado con exito";
 } else {
     $_SESSION['msg'] = "Error al crear el test.";
-    header("Location: panel.php");
-    exit();
 }
+
+header("Location: panel.php");
+exit();

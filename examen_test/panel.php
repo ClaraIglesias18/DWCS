@@ -92,7 +92,8 @@ $resultados = obtener_resultados_usuario($conexion, $_SESSION['id_usuario']);
                     <?php endif; ?>
                 </tbody>
             </table>
-
+            <h2>Crear preguntas</h2>
+            <a href="crear_pregutas.php">Crear</a>
             <h2>Mis Resultados</h2>
             <table>
                 <thead>

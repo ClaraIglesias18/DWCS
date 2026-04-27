@@ -16,8 +16,8 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
 
         if (insertar_autor($conexion, $nombre, $nacionalidad)) {
             $_SESSION['mensaje'] = "Autor creado exitosamente.";
-            header("Location: index.php");
-            exit;
+            //header("Location: index.php");
+            //exit;
         } else {
             $_SESSION['mensaje'] = "Error al crear el autor.";
             header("Location: index.php");

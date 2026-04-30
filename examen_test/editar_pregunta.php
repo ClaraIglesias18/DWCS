@@ -1,7 +1,6 @@
 <?php
 session_start();
 require_once 'db.php';
-require_once 'funciones_tests.php';
 require_once 'funciones_preguntas.php';
 
 if (!isset($_SESSION['id_usuario']) || $_SESSION['tipo'] !== 'admin') {
@@ -9,26 +8,9 @@ if (!isset($_SESSION['id_usuario']) || $_SESSION['tipo'] !== 'admin') {
     exit();
 }
 
-$id_test = $_GET['id'] ?? null;
-$id_pregunta = $_GET['id_pregunta'] ?? null;
+$id_pregunta = $_GET['id_pregunta'];
 
 $pregunta = obtener_pregunta_id($conexion, $id_pregunta);
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $id_pregunta = $_POST['id_pregunta'];
-    $enunciado = $_POST['enunciado'];
-    $op_a = $_POST['op_a'];
-    $op_b = $_POST['op_b'];
-    $op_c = $_POST['op_c'];
-    $correcta = $_POST['correcta'];
-
-    // Actualizar la pregunta
-    actualizar_pregunta($conexion, $id_pregunta, $enunciado, $op_a, $op_b, $op_c, $correcta);
-
-    // Redirigir de nuevo al panel o mostrar un mensaje de éxito
-    header("Location: panel.php?");
-    exit();
-}
 
 ?>
 
@@ -46,9 +28,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <a href="editar_test.php?id=<?php echo $id_test; ?>" style="color: red;">Volver al Test</a>
         </header>
         <div class="form-card">
-            <form action="editar_pregunta.php" method="POST">
+            <form action="procesar_preguntas.php" method="POST">
                 <input type="hidden" name="id_pregunta" value="<?php echo $pregunta['id_pregunta']; ?>">
-                <input type="hidden" name="id_test" value="<?php echo $id_test; ?>">
+                <input type="hidden" name="accion" value="editar">
 
                 <label for="enunciado">Enunciado:</label>
                 <textarea id="enunciado" name="enunciado" required><?php echo htmlspecialchars($pregunta['enunciado']); ?></textarea>

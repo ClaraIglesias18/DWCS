@@ -59,7 +59,8 @@ $resultados = obtener_resultados_usuario($conexion, $_SESSION['id_usuario']);
             </div>
         <?php endif; ?>
         <?php if ($tipo === 'admin'): ?>
-            <form action="crear_test.php" method="POST" style="margin-bottom: 20px;">
+            <form action="procesar_tests.php" method="POST" style="margin-bottom: 20px;">
+                <input type="hidden" name="accion" value="crear">
                 <input type="text" name="titulo" placeholder="Título del Test" required>
                 <button type="submit">Crear Test</button>
             <?php endif; ?>

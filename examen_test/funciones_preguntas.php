@@ -46,3 +46,12 @@ function actualizar_pregunta($conexion, $id_pregunta, $enunciado, $op_a, $op_b, 
     mysqli_stmt_close($stmt);
     return $resultado;
 }
+
+function eliminar_pregunta($conexion, $id_pregunta) {
+    $sql = "DELETE FROM preguntas WHERE id_pregunta = ?";
+    $stmt = mysqli_prepare($conexion, $sql);
+    mysqli_stmt_bind_param($stmt, "i", $id_pregunta);
+    $resultado = mysqli_stmt_execute($stmt);
+    mysqli_stmt_close($stmt);
+    return $resultado;
+}
